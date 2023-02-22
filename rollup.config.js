@@ -7,6 +7,8 @@ export default {
       name: 'capacitorGoogleAuthentication',
       globals: {
         '@capacitor/core': 'capacitorExports',
+        'firebase/app': 'app',
+        'firebase/auth': 'auth',
       },
       sourcemap: true,
       inlineDynamicImports: true,
@@ -18,5 +20,9 @@ export default {
       inlineDynamicImports: true,
     },
   ],
-  external: ['@capacitor/core'],
+  external: [
+    '@capacitor/core',
+    'firebase/app',
+    'firebase/auth',
+  ],
 };
