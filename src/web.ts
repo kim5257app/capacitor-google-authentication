@@ -1,16 +1,17 @@
 import { WebPlugin } from '@capacitor/core';
 import { initializeApp } from 'firebase/app';
+import type { FirebaseOptions } from 'firebase/app';
 import {
   getAuth,
   signInWithPhoneNumber,
   RecaptchaVerifier
 } from 'firebase/auth';
-import type { ConfirmationResult } from 'firebase/auth';
+import type { ConfirmationResult, Auth } from 'firebase/auth';
 
 import type { GoogleAuthenticationPlugin } from './definitions';
 
 export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenticationPlugin {
-  private readonly firebaseAuth;
+  private firebaseAuth: Auth | null = null;
 
   private confirmationResult: ConfirmationResult | null = null;
 
@@ -20,12 +21,22 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
   constructor() {
     super();
+  }
 
-    this.firebaseAuth = getAuth(initializeApp());
+  async initialize(config: FirebaseOptions): Promise<{ result: 'success' | 'error'}> {
+    this.firebaseAuth = getAuth(initializeApp(config));
+    return Promise.resolve({ result: 'success' });
   }
 
   async verifyPhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
     try {
+      if (this.firebaseAuth == null) {
+        throw {
+          result: 'error',
+          message: 'Not initialized',
+        }
+      }
+
       if (this.recaptchaVerifier == null) {
         this.recaptchaVerifier = new RecaptchaVerifier(elem, {
           size: 'invisible',
@@ -73,6 +84,13 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
   }
 
   async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{ result: "success" | "error"; idToken: string }> {
+    if (this.firebaseAuth == null) {
+      throw {
+        result: 'error',
+        message: 'Not initialized',
+      }
+    }
+
     const idToken: string | undefined  = await this.firebaseAuth.currentUser?.getIdToken(forceRefresh);
 
     return Promise.resolve({
@@ -82,7 +100,14 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
   }
 
   async signOut(): Promise<{ result: "success" | "error" }> {
-    this.firebaseAuth.signOut();
+    if (this.firebaseAuth == null) {
+      throw {
+        result: 'error',
+        message: 'Not initialized',
+      }
+    }
+
+    await this.firebaseAuth.signOut();
 
     return Promise.resolve({ result: 'success' });
   }

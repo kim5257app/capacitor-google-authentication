@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "960104226527",
+    "project_id": "capacitor-auth-firebase",
+    "storage_bucket": "capacitor-auth-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960104226527:android:c382a7108e63f958cb536a",
+        "android_client_info": {
+          "package_name": "com.kim5257.capacitor.auth.google"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960104226527-44bqhtroqq6bteeo7rrk33sn8n47nfku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWYh_Tdw87cSNwZwD3y5TocfpbnoJRDvw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960104226527-44bqhtroqq6bteeo7rrk33sn8n47nfku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

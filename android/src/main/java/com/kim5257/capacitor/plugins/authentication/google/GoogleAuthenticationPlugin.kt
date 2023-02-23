@@ -51,6 +51,13 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     @PluginMethod
+    private fun initialize(call: PluginCall) {
+        call.resolve(JSObject().apply {
+            this.put("result", "success")
+        })
+    }
+
+    @PluginMethod
     fun verifyPhoneNumber(call: PluginCall) {
         try {
             val phone: String = call.getString("phone")?:""
