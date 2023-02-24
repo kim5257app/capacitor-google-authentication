@@ -16,9 +16,15 @@ npx cap sync
 * [`initialize(...)`](#initialize)
 * [`verifyPhoneNumber(...)`](#verifyphonenumber)
 * [`confirmPhoneNumber(...)`](#confirmphonenumber)
+* [`createUserWithEmailAndPassword(...)`](#createuserwithemailandpassword)
+* [`signInWithEmailAndPassword(...)`](#signinwithemailandpassword)
 * [`getIdToken(...)`](#getidtoken)
 * [`signOut()`](#signout)
 * [`echo(...)`](#echo)
+* [`addListener('google.auth.phone.verify.completed', ...)`](#addlistenergoogleauthphoneverifycompleted)
+* [`addListener('google.auth.phone.code.sent', ...)`](#addlistenergoogleauthphonecodesent)
+* [`addListener('google.auth.phone.verify.failed', ...)`](#addlistenergoogleauthphoneverifyfailed)
+* [`addListener('google.auth.state.update', ...)`](#addlistenergoogleauthstateupdate)
 * [Interfaces](#interfaces)
 
 </docgen-index>
@@ -71,6 +77,36 @@ confirmPhoneNumber(options: { code: string; }) => Promise<{ result: 'success' | 
 --------------------
 
 
+### createUserWithEmailAndPassword(...)
+
+```typescript
+createUserWithEmailAndPassword(options: { email: string; password: string; }) => Promise<{ result: "success" | "error"; idToken: string; }>
+```
+
+| Param         | Type                                              |
+| ------------- | ------------------------------------------------- |
+| **`options`** | <code>{ email: string; password: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
+
+--------------------
+
+
+### signInWithEmailAndPassword(...)
+
+```typescript
+signInWithEmailAndPassword(options: { email: string; password: string; }) => Promise<{ result: "success" | "error"; idToken: string; }>
+```
+
+| Param         | Type                                              |
+| ------------- | ------------------------------------------------- |
+| **`options`** | <code>{ email: string; password: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
+
+--------------------
+
+
 ### getIdToken(...)
 
 ```typescript
@@ -112,6 +148,70 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 --------------------
 
 
+### addListener('google.auth.phone.verify.completed', ...)
+
+```typescript
+addListener(eventName: 'google.auth.phone.verify.completed', listenerFunc: (resp: { idToken: string; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                                                 |
+| ------------------ | ---------------------------------------------------- |
+| **`eventName`**    | <code>'google.auth.phone.verify.completed'</code>    |
+| **`listenerFunc`** | <code>(resp: { idToken: string; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('google.auth.phone.code.sent', ...)
+
+```typescript
+addListener(eventName: 'google.auth.phone.code.sent', listenerFunc: (resp: { verificationId: string | null; resendingToken: string | null; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                                                                                                |
+| ------------------ | --------------------------------------------------------------------------------------------------- |
+| **`eventName`**    | <code>'google.auth.phone.code.sent'</code>                                                          |
+| **`listenerFunc`** | <code>(resp: { verificationId: string \| null; resendingToken: string \| null; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('google.auth.phone.verify.failed', ...)
+
+```typescript
+addListener(eventName: 'google.auth.phone.verify.failed', listenerFunc: (resp: { message: string; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                                                 |
+| ------------------ | ---------------------------------------------------- |
+| **`eventName`**    | <code>'google.auth.phone.verify.failed'</code>       |
+| **`listenerFunc`** | <code>(resp: { message: string; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
+### addListener('google.auth.state.update', ...)
+
+```typescript
+addListener(eventName: 'google.auth.state.update', listenerFunc: (resp: { idToken: string; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+```
+
+| Param              | Type                                                 |
+| ------------------ | ---------------------------------------------------- |
+| **`eventName`**    | <code>'google.auth.state.update'</code>              |
+| **`listenerFunc`** | <code>(resp: { idToken: string; }) =&gt; void</code> |
+
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -127,5 +227,12 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 | **`messagingSenderId`** | <code>string</code> | Unique numerical value used to identify each sender that can send Firebase Cloud Messaging messages to client apps.                                               |
 | **`appId`**             | <code>string</code> | Unique identifier for the app.                                                                                                                                    |
 | **`measurementId`**     | <code>string</code> | An ID automatically created when you enable Analytics in your Firebase project and register a web app. In versions 7.20.0 and higher, this parameter is optional. |
+
+
+#### PluginListenerHandle
+
+| Prop         | Type                                      |
+| ------------ | ----------------------------------------- |
+| **`remove`** | <code>() =&gt; Promise&lt;void&gt;</code> |
 
 </docgen-api>

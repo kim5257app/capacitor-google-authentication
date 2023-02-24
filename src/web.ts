@@ -3,7 +3,10 @@ import { initializeApp } from 'firebase/app';
 import type { FirebaseOptions } from 'firebase/app';
 import {
   getAuth,
+  onAuthStateChanged,
   signInWithPhoneNumber,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   RecaptchaVerifier
 } from 'firebase/auth';
 import type { ConfirmationResult, Auth } from 'firebase/auth';
@@ -17,7 +20,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
   private recaptchaVerifier: RecaptchaVerifier | null = null;
 
-  // private recaptchaVerifier: firebase.auth.RecaptchaVerifier | null = null;
+  private recaptchaElement: HTMLElement | null = null;
 
   constructor() {
     super();
@@ -25,11 +28,24 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
   async initialize(config: FirebaseOptions): Promise<{ result: 'success' | 'error'}> {
     this.firebaseAuth = getAuth(initializeApp(config));
+
+    console.log('initialize:', this.firebaseAuth);
+
+    onAuthStateChanged(this.firebaseAuth, async (user) => {
+      const idToken = await user?.getIdToken(true);
+
+      this.notifyListeners('google.auth.state.update', {
+        idToken: (idToken != null) ? idToken : '',
+      });
+    });
+
     return Promise.resolve({ result: 'success' });
   }
 
   async verifyPhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
     try {
+      console.log('verifyPhoneNumber:', this.firebaseAuth);
+
       if (this.firebaseAuth == null) {
         throw {
           result: 'error',
@@ -37,7 +53,9 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         }
       }
 
-      if (this.recaptchaVerifier == null) {
+      if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
+        console.log('Create Recaptcha');
+        this.recaptchaElement = elem;
         this.recaptchaVerifier = new RecaptchaVerifier(elem, {
           size: 'invisible',
           callback() {
@@ -81,6 +99,50 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     })
 
     return Promise.resolve({ result: 'success' });
+  }
+
+  async createUserWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{ result: "success" | "error"; idToken: string }> {
+    if (this.firebaseAuth == null) {
+      throw {
+        result: 'error',
+        message: 'Not initialized',
+      }
+    }
+
+    const userCredential = await createUserWithEmailAndPassword(this.firebaseAuth, email, password);
+
+    const idToken = await userCredential.user.getIdToken(false);
+
+    this.notifyListeners('google.auth.phone.verify.completed', {
+      idToken,
+    })
+
+    return Promise.resolve({
+      result: 'success',
+      idToken,
+    });
+  }
+
+  async signInWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{ result: "success" | "error"; idToken: string }> {
+    if (this.firebaseAuth == null) {
+      throw {
+        result: 'error',
+        message: 'Not initialized',
+      }
+    }
+
+    const userCredential = await signInWithEmailAndPassword(this.firebaseAuth, email, password);
+
+    const idToken = await userCredential.user.getIdToken(false);
+
+    this.notifyListeners('google.auth.phone.verify.completed', {
+      idToken,
+    })
+
+    return Promise.resolve({
+      result: 'success',
+      idToken,
+    });
   }
 
   async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{ result: "success" | "error"; idToken: string }> {

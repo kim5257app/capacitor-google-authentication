@@ -1,41 +1,38 @@
 <template>
-  <v-app>
-    <v-main>
-      <v-container>
-        <v-card
-          :max-width="540">
-          <v-card-title>
-            로그인
-          </v-card-title>
-          <v-card-text>
-            <v-text-field
-              label="이메일"
-              color="primary"
-              :rules="[options.rules.required, options.rules.email]">
-            </v-text-field>
-            <v-text-field
-              label="비밀번호"
-              :rules="[options.rules.required]"
-              @click:append-inner="options.password.hidden = !options.password.hidden"
-              :append-inner-icon="(options.password.hidden) ? 'mdi-eye-off' : 'mdi-eye'"
-              :type="(options.password.hidden) ? 'password' : 'text'">
-            </v-text-field>
-            <v-btn
-              color="primary"
-              block>
-              로그인
-            </v-btn>
-          </v-card-text>
-        </v-card>
-      </v-container>
-    </v-main>
-  </v-app>
+  <v-card-text>
+    <v-text-field
+      v-model="form.email"
+      label="이메일"
+      color="primary"
+      :rules="[options.rules.required, options.rules.email]">
+    </v-text-field>
+    <v-text-field
+      v-model="form.password"
+      label="비밀번호"
+      :rules="[options.rules.required]"
+      @click:append-inner="options.password.hidden = !options.password.hidden"
+      :append-inner-icon="(options.password.hidden) ? 'mdi-eye-off' : 'mdi-eye'"
+      :type="(options.password.hidden) ? 'password' : 'text'">
+    </v-text-field>
+    <v-btn
+      @click="signIn"
+      :loading="loading.signIn"
+      color="primary"
+      block>
+      로그인
+    </v-btn>
+  </v-card-text>
 </template>
 
 <script>
+import capacitor from '@/capacitor';
+
 export default {
   name: 'EmailLogin',
   data: () => ({
+    loading: {
+      signIn: false,
+    },
     form: {
       email: '',
       password: '',
@@ -52,7 +49,33 @@ export default {
         },
       },
     },
+    capacitor,
   }),
+  methods: {
+    async signIn() {
+      try {
+        this.loading.signIn = true;
+        await capacitor.signInWithEmailAndPassword(this.form);
+      } catch (error) {
+        console.error(error);
+
+        if (error.code === 'auth/user-not-found') {
+          this.createUser().then(() => {});
+        } else {
+          this.loading.signIn = false;
+        }
+      }
+    },
+    async createUser() {
+      try {
+        await capacitor.createUserWithEmailAndPassword(this.form);
+      } catch (error) {
+        console.error(error);
+
+        this.loading.signIn = false;
+      }
+    }
+  },
 };
 </script>
 

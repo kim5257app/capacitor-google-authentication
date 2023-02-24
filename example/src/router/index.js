@@ -6,6 +6,7 @@ const routes = [
     path: '/',
     name: 'Home',
     component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
+    meta: { needAuth: true },
   },
   {
     path: '/login',
@@ -22,6 +23,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "login" */ '@/views/login/PhoneLogin.vue'),
       }
     ],
+    meta: { needNonAuth: true },
   },
 ]
 

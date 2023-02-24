@@ -154,6 +154,53 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun createUserWithEmailAndPassword(call: PluginCall) {
+        try {
+            val email: String = call.getString("email") ?: ""
+            val password = call.getString("password") ?: ""
+
+            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener { getTokenResult ->
+                    val token = getIdToken(getTokenResult.credential!!)
+                    
+                    this.notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+
+                    })
+                }
+                .addOnFailureListener { exception ->
+
+                }
+
+            call.resolve(JSObject().apply {
+                this.put("result", "success")
+            })
+        } catch (exception: Exception) {
+            call.reject(
+                exception.message,
+                JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", "Invalid access")
+                }
+            )
+        }
+    }
+
+    @PluginMethod
+    fun signInWithEmailAndPassword(call: PluginCall) {
+        try {
+
+        } catch (exception: Exception) {
+            call.reject(
+                exception.message,
+                JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", "Invalid access")
+                }
+            )
+        }
+    }
+
+    @PluginMethod
     fun getIdToken(call: PluginCall) {
         try {
             val user = FirebaseAuth.getInstance().currentUser
@@ -165,19 +212,19 @@ class GoogleAuthenticationPlugin : Plugin() {
                     this.put("result", "success")
                     this.put("idToken", getTokenResult.token)
                 })
-            }.addOnFailureListener { excection ->
+            }.addOnFailureListener { exception ->
                 call.reject(
-                    excection.message,
+                    exception.message,
                     JSObject().apply {
                         this.put("result", "error")
-                        this.put("message", excection.message)
+                        this.put("message", exception.message)
                     }
                 )
             }
 
         } catch (exception: Exception) {
             call.reject(
-                "Invalid access",
+                exception.message,
                 JSObject().apply {
                     this.put("result", "error")
                     this.put("message", "Invalid access")

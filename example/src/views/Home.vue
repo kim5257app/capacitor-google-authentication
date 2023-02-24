@@ -6,10 +6,10 @@
           :max-width="540">
           <v-card-text>
             <v-btn
-              to="login"
+              @click="capacitor.signOut"
               color="primary"
               block>
-              로그인
+              로그아웃
             </v-btn>
           </v-card-text>
         </v-card>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import capacitor from '@/capacitor';
+
 export default {
   name: 'Home',
   data: () => ({
@@ -38,6 +40,7 @@ export default {
         },
       },
     },
+    capacitor,
   }),
 }
 </script>
