@@ -3,13 +3,15 @@ import firebaseConfig from '@/config/firebase_config.json';
 import router from '@/router';
 
 let googleAuthStateUpdated = false;
+let checkedAuth = false;
 
 GoogleAuthentication.initialize(firebaseConfig).then(() => {});
 
 console.log('GoogleAuthentication:', GoogleAuthentication);
 
-GoogleAuthentication.addListener('google.auth.state.update', () => {
+GoogleAuthentication.addListener('google.auth.state.update', async () => {
   googleAuthStateUpdated = true;
+  await checkAuth();
 });
 
 router.beforeEach(async (to, from, next) => {
@@ -30,16 +32,34 @@ router.beforeEach(async (to, from, next) => {
   }
 });
 
+router.beforeResolve(async (to, from, next) => {
+  console.log('beforeResolve:', to, router.currentRoute.value);
+
+  next();
+});
+
+router.afterEach(async (to, from, error) => {
+  console.log('afterEach:', to, error);
+
+  if (!checkedAuth) {
+    await checkAuth();
+  }
+})
+
 async function checkAuth() {
   const { idToken } = await GoogleAuthentication.getIdToken({ forceRefresh: true });
   const { meta } = router.currentRoute.value;
 
-  console.log('idToken:', idToken, meta);
+  console.log('idToken:', idToken, router.currentRoute.value, meta);
 
-  if (idToken !== '' && meta.needNonAuth) {
-    router.push('/').then(() => {});
-  } else if (idToken === '' && meta.needAuth) {
-    router.push('/login').then(() => {});
+  if (router.currentRoute.value.name != null) {
+    if (idToken !== '' && meta.needNonAuth) {
+      router.push('/').then(() => {});
+    } else if (idToken === '' && meta.needAuth) {
+      router.push('/login').then(() => {});
+    }
+
+    checkedAuth = true;
   }
 }
 

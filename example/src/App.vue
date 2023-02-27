@@ -25,8 +25,6 @@ export default {
 
     this.capacitor.addListener('google.auth.state.update', ({ idToken }) => {
       console.log('state update:', idToken);
-
-      this.capacitor.checkAuth();
     });
   },
 }

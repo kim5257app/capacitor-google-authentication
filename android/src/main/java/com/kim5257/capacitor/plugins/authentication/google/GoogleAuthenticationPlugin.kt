@@ -37,6 +37,16 @@ class GoogleAuthenticationPlugin : Plugin() {
         }
     }
 
+    private fun getIdToken(user: FirebaseUser, forceRefresh: Boolean): String {
+        var token = ""
+
+        runBlocking {
+            token = user.getIdToken(forceRefresh).await().token?:""
+        }
+
+        return token
+    }
+
     private fun getIdToken(credential: AuthCredential): String {
         var token = ""
 
@@ -92,8 +102,8 @@ class GoogleAuthenticationPlugin : Plugin() {
                         pThis.resendingToken = resendingToken
 
                         notifyListeners("google.auth.phone.code.sent", JSObject().apply {
-                          this.put("verificationId", verificationId)
-                          this.put("resendingToken", resendingToken)
+                            this.put("verificationId", verificationId)
+                            this.put("resendingToken", resendingToken)
                         })
                     }
 
@@ -161,19 +171,26 @@ class GoogleAuthenticationPlugin : Plugin() {
 
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener { getTokenResult ->
-                    val token = getIdToken(getTokenResult.credential!!)
-                    
-                    this.notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                    val token = getIdToken(getTokenResult.user!!, false)
 
+                    this.notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                        this.put("idToken", token)
+                    })
+
+                    call.resolve(JSObject().apply {
+                        this.put("result", "success")
+                        this.put("idToken", token)
                     })
                 }
                 .addOnFailureListener { exception ->
-
+                    call.reject(
+                        exception.message,
+                        JSObject().apply {
+                            this.put("result", "error")
+                            this.put("message", exception.message)
+                        }
+                    )
                 }
-
-            call.resolve(JSObject().apply {
-                this.put("result", "success")
-            })
         } catch (exception: Exception) {
             call.reject(
                 exception.message,
@@ -188,7 +205,31 @@ class GoogleAuthenticationPlugin : Plugin() {
     @PluginMethod
     fun signInWithEmailAndPassword(call: PluginCall) {
         try {
+            val email: String = call.getString("email") ?: ""
+            val password = call.getString("password") ?: ""
 
+            FirebaseAuth.getInstance().signInWithEmailAndPassword(email, password)
+                .addOnSuccessListener { getTokenResult ->
+                    val token = getIdToken(getTokenResult.user!!, false)
+
+                    this.notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                        this.put("idToken", token)
+                    })
+
+                    call.resolve(JSObject().apply {
+                        this.put("result", "success")
+                        this.put("idToken", token)
+                    })
+                }
+                .addOnFailureListener { exception ->
+                    call.reject(
+                        exception.message,
+                        JSObject().apply {
+                            this.put("result", "error")
+                            this.put("message", exception.message)
+                        }
+                    )
+                }
         } catch (exception: Exception) {
             call.reject(
                 exception.message,
@@ -204,24 +245,29 @@ class GoogleAuthenticationPlugin : Plugin() {
     fun getIdToken(call: PluginCall) {
         try {
             val user = FirebaseAuth.getInstance().currentUser
-                ?: throw java.lang.IllegalArgumentException("Invalid verification ID")
             val forceRefresh = call.getBoolean("forceRefresh")?:false
 
-            user.getIdToken(forceRefresh).addOnSuccessListener { getTokenResult ->
+            if (user != null) {
+                user.getIdToken(forceRefresh).addOnSuccessListener { getTokenResult ->
+                    call.resolve(JSObject().apply {
+                        this.put("result", "success")
+                        this.put("idToken", getTokenResult.token)
+                    })
+                }.addOnFailureListener { exception ->
+                    call.reject(
+                        exception.message,
+                        JSObject().apply {
+                            this.put("result", "error")
+                            this.put("message", exception.message)
+                        }
+                    )
+                }
+            } else {
                 call.resolve(JSObject().apply {
                     this.put("result", "success")
-                    this.put("idToken", getTokenResult.token)
+                    this.put("idToken", "")
                 })
-            }.addOnFailureListener { exception ->
-                call.reject(
-                    exception.message,
-                    JSObject().apply {
-                        this.put("result", "error")
-                        this.put("message", exception.message)
-                    }
-                )
             }
-
         } catch (exception: Exception) {
             call.reject(
                 exception.message,

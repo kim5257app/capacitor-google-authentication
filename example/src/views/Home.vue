@@ -42,5 +42,8 @@ export default {
     },
     capacitor,
   }),
+  beforeRouteEnter() {
+    console.log('Home beforeRouteEnter');
+  },
 }
 </script>
