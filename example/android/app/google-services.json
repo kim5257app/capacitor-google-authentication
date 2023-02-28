@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "960104226527-44bqhtroqq6bteeo7rrk33sn8n47nfku.apps.googleusercontent.com",
+          "client_id": "960104226527-c0isrvrg9omicvj7k3rm6v0143b3gk6f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kim5257.capacitor.auth.google",
+            "certificate_hash": "1e6581e05f348c073dbfa6c3b74bda9978d46242"
+          }
+        },
+        {
+          "client_id": "960104226527-lciq621c5dqi1gfussnc6bor7srpv76m.apps.googleusercontent.com",
           "client_type": 3
         }
       ],

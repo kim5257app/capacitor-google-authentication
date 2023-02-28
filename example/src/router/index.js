@@ -21,6 +21,11 @@ const routes = [
         path: 'phone',
         name: 'PhoneLogin',
         component: () => import(/* webpackChunkName: "login" */ '@/views/login/PhoneLogin.vue'),
+      },
+      {
+        path: 'sns',
+        name: 'SnsLogin',
+        component: () => import(/* webpackChunkName: "login" */ '@/views/login/SnsLogin.vue'),
       }
     ],
     meta: { needNonAuth: true },

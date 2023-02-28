@@ -1,11 +1,18 @@
 package com.kim5257.capacitor.plugins.authentication.google
 
 import android.util.Log
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import com.getcapacitor.JSObject
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.PluginMethod
 import com.getcapacitor.annotation.CapacitorPlugin
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
+import com.google.android.gms.auth.api.identity.SignInClient
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import kotlinx.coroutines.runBlocking
@@ -21,6 +28,10 @@ class GoogleAuthenticationPlugin : Plugin() {
     private var verificationId: String? = null
     private var resendingToken: PhoneAuthProvider.ForceResendingToken? = null
 
+    private lateinit var oneTabClient: SignInClient
+
+    private lateinit var resultLauncher: ActivityResultLauncher<IntentSenderRequest>
+
     init {
         FirebaseAuth.getInstance().addAuthStateListener {firebaseAuth ->
             if (firebaseAuth.currentUser != null) {
@@ -33,6 +44,34 @@ class GoogleAuthenticationPlugin : Plugin() {
                 notifyListeners("google.auth.state.update", JSObject().apply {
                     this.put("idToken", "");
                 })
+            }
+        }
+    }
+
+    override fun load() {
+        super.load()
+
+        oneTabClient = Identity.getSignInClient(activity)
+
+        resultLauncher = activity.registerForActivityResult(
+            ActivityResultContracts.StartIntentSenderForResult()
+        ) { activityResult ->
+            try {
+                val credential = oneTabClient.getSignInCredentialFromIntent(activityResult.data)
+                val firebaseCredential = GoogleAuthProvider.getCredential(credential.googleIdToken, null)
+
+                runBlocking {
+                    val token = FirebaseAuth.getInstance()
+                        .signInWithCredential(firebaseCredential)
+                        .await()
+                        .user?.getIdToken(false)
+
+                    notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                        this.put("idToken", token)
+                    })
+                }
+            } catch (exception: ApiException) {
+                Log.d("GoogleAuthPlugin", exception.message?:"")
             }
         }
     }
@@ -125,7 +164,7 @@ class GoogleAuthenticationPlugin : Plugin() {
             Log.e(TAG, "Unknown Error: ${exception.message}")
 
             call.reject(
-                "Error: ${exception.message}",
+                exception.message,
                 JSObject().apply {
                     this.put("result", "error")
                     this.put("message", exception.message)
@@ -154,10 +193,10 @@ class GoogleAuthenticationPlugin : Plugin() {
             })
         } catch (exception: Exception) {
             call.reject(
-                "Invalid access",
+                exception.message,
                 JSObject().apply {
                     this.put("result", "error")
-                    this.put("message", "Invalid access")
+                    this.put("message", exception.message)
                 }
             )
         }
@@ -196,7 +235,7 @@ class GoogleAuthenticationPlugin : Plugin() {
                 exception.message,
                 JSObject().apply {
                     this.put("result", "error")
-                    this.put("message", "Invalid access")
+                    this.put("message", exception.message)
                 }
             )
         }
@@ -235,7 +274,58 @@ class GoogleAuthenticationPlugin : Plugin() {
                 exception.message,
                 JSObject().apply {
                     this.put("result", "error")
-                    this.put("message", "Invalid access")
+                    this.put("message", exception.message)
+                }
+            )
+        }
+    }
+
+    @PluginMethod
+    fun signInWithGoogle(call: PluginCall) {
+        try {
+            val signInRequest = BeginSignInRequest.builder()
+                .setPasswordRequestOptions(
+                    BeginSignInRequest.PasswordRequestOptions.builder()
+                        .setSupported(true)
+                        .build()
+                )
+                .setGoogleIdTokenRequestOptions(
+                    BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        .setServerClientId(activity.getString(R.string.google_client_id))
+                        .setFilterByAuthorizedAccounts(false)
+                        .build()
+                )
+                .setAutoSelectEnabled(true)
+                .build()
+
+            oneTabClient.beginSignIn(signInRequest)
+                .addOnSuccessListener { signInResult ->
+                    resultLauncher.launch(
+                        IntentSenderRequest
+                            .Builder(signInResult.pendingIntent.intentSender)
+                            .build()
+                    )
+
+                    call.resolve(JSObject().apply {
+                        this.put("result", "success")
+                    })
+                }
+                .addOnFailureListener { exception ->
+                    call.reject(
+                        exception.message,
+                        JSObject().apply {
+                            this.put("result", "error")
+                            this.put("message", exception.message)
+                        }
+                    )
+                }
+        } catch (exception: Exception){
+            call.reject(
+                exception.message,
+                JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", exception.message)
                 }
             )
         }
@@ -273,7 +363,7 @@ class GoogleAuthenticationPlugin : Plugin() {
                 exception.message,
                 JSObject().apply {
                     this.put("result", "error")
-                    this.put("message", "Invalid access")
+                    this.put("message", exception.message)
                 }
             )
         }

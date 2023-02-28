@@ -18,6 +18,7 @@ npx cap sync
 * [`confirmPhoneNumber(...)`](#confirmphonenumber)
 * [`createUserWithEmailAndPassword(...)`](#createuserwithemailandpassword)
 * [`signInWithEmailAndPassword(...)`](#signinwithemailandpassword)
+* [`signInWithGoogle()`](#signinwithgoogle)
 * [`getIdToken(...)`](#getidtoken)
 * [`signOut()`](#signout)
 * [`echo(...)`](#echo)
@@ -101,6 +102,17 @@ signInWithEmailAndPassword(options: { email: string; password: string; }) => Pro
 | Param         | Type                                              |
 | ------------- | ------------------------------------------------- |
 | **`options`** | <code>{ email: string; password: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
+
+--------------------
+
+
+### signInWithGoogle()
+
+```typescript
+signInWithGoogle() => Promise<{ result: "success" | "error"; idToken: string; }>
+```
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
 

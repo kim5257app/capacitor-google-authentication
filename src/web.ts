@@ -145,6 +145,10 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
+  signInWithGoogle(): Promise<{ result: "success" | "error"; idToken: string }> {
+    return Promise.resolve({ idToken: '', result: 'success' });
+  }
+
   async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{ result: "success" | "error"; idToken: string }> {
     if (this.firebaseAuth == null) {
       throw {

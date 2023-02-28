@@ -12,6 +12,8 @@ export interface GoogleAuthenticationPlugin {
 
   signInWithEmailAndPassword(options: { email: string, password: string }): Promise<{ result: "success" | "error"; idToken: string }>;
 
+  signInWithGoogle(): Promise<{ result: "success" | "error"; idToken: string }>;
+
   getIdToken(options: { forceRefresh: boolean })
     : Promise<{
       result: 'success' | 'error';

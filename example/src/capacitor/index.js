@@ -68,6 +68,7 @@ export default {
   confirmPhoneNumber: GoogleAuthentication.confirmPhoneNumber,
   createUserWithEmailAndPassword: GoogleAuthentication.createUserWithEmailAndPassword,
   signInWithEmailAndPassword: GoogleAuthentication.signInWithEmailAndPassword,
+  signInWithGoogle: GoogleAuthentication.signInWithGoogle,
   getIdToken: GoogleAuthentication.getIdToken,
   signOut: GoogleAuthentication.signOut,
   echo: GoogleAuthentication.echo,
