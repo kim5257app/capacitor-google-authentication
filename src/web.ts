@@ -7,7 +7,9 @@ import {
   signInWithPhoneNumber,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  RecaptchaVerifier
+  signInWithPopup,
+  RecaptchaVerifier,
+  GoogleAuthProvider,
 } from 'firebase/auth';
 import type { ConfirmationResult, Auth } from 'firebase/auth';
 
@@ -145,8 +147,29 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
-  signInWithGoogle(): Promise<{ result: "success" | "error"; idToken: string }> {
-    return Promise.resolve({ idToken: '', result: 'success' });
+  async signInWithGoogle(): Promise<{ result: "success" | "error"; idToken: string }> {
+    if (this.firebaseAuth == null) {
+      throw {
+        result: 'error',
+        message: 'Not initialized',
+      }
+    }
+
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(this.firebaseAuth, provider);
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+
+    if (credential == null) {
+      throw {
+        result: 'error',
+        message: 'Sign in failed',
+      }
+    }
+
+    return {
+      idToken: (credential.idToken != null) ? credential.idToken : '',
+      result: 'success'
+    };
   }
 
   async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{ result: "success" | "error"; idToken: string }> {
