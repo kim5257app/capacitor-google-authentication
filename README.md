@@ -36,12 +36,12 @@ npx cap sync
 ### initialize(...)
 
 ```typescript
-initialize(config: FirebaseOptions) => Promise<{ result: 'success' | 'error'; }>
+initialize(config: GoogleAuthenticationOptions) => Promise<{ result: 'success' | 'error'; }>
 ```
 
-| Param        | Type                                                        |
-| ------------ | ----------------------------------------------------------- |
-| **`config`** | <code><a href="#firebaseoptions">FirebaseOptions</a></code> |
+| Param        | Type                                                                                |
+| ------------ | ----------------------------------------------------------------------------------- |
+| **`config`** | <code><a href="#googleauthenticationoptions">GoogleAuthenticationOptions</a></code> |
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
 
@@ -227,18 +227,11 @@ addListener(eventName: 'google.auth.state.update', listenerFunc: (resp: { idToke
 ### Interfaces
 
 
-#### FirebaseOptions
+#### GoogleAuthenticationOptions
 
-| Prop                    | Type                | Description                                                                                                                                                       |
-| ----------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`apiKey`**            | <code>string</code> | An encrypted string used when calling certain APIs that don't need to access private user data (example value: `AIzaSyDOCAbC123dEf456GhI789jKl012-MnO`).          |
-| **`authDomain`**        | <code>string</code> | Auth domain for the project ID.                                                                                                                                   |
-| **`databaseURL`**       | <code>string</code> | Default Realtime Database URL.                                                                                                                                    |
-| **`projectId`**         | <code>string</code> | The unique identifier for the project across all of Firebase and Google Cloud.                                                                                    |
-| **`storageBucket`**     | <code>string</code> | The default Cloud Storage bucket name.                                                                                                                            |
-| **`messagingSenderId`** | <code>string</code> | Unique numerical value used to identify each sender that can send Firebase Cloud Messaging messages to client apps.                                               |
-| **`appId`**             | <code>string</code> | Unique identifier for the app.                                                                                                                                    |
-| **`measurementId`**     | <code>string</code> | An ID automatically created when you enable Analytics in your Firebase project and register a web app. In versions 7.20.0 and higher, this parameter is optional. |
+| Prop                 | Type                |
+| -------------------- | ------------------- |
+| **`googleClientId`** | <code>string</code> |
 
 
 #### PluginListenerHandle

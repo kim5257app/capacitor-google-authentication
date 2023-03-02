@@ -25,6 +25,8 @@ class GoogleAuthenticationPlugin : Plugin() {
         const val TAG = "GoogleAuthPlugin"
     }
 
+    private lateinit var googleClientId: String
+
     private var verificationId: String? = null
     private var resendingToken: PhoneAuthProvider.ForceResendingToken? = null
 
@@ -100,7 +102,9 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     @PluginMethod
-    private fun initialize(call: PluginCall) {
+    fun initialize(call: PluginCall) {
+        this.googleClientId = call.getString("googleClientId")?:""
+
         call.resolve(JSObject().apply {
             this.put("result", "success")
         })
@@ -292,7 +296,7 @@ class GoogleAuthenticationPlugin : Plugin() {
                 .setGoogleIdTokenRequestOptions(
                     BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                         .setSupported(true)
-                        .setServerClientId(activity.getString(R.string.google_client_id))
+                        .setServerClientId(this.googleClientId)
                         .setFilterByAuthorizedAccounts(false)
                         .build()
                 )

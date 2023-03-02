@@ -1,8 +1,12 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 import type { FirebaseOptions } from 'firebase/app';
 
+export interface GoogleAuthenticationOptions extends FirebaseOptions {
+  googleClientId: string;
+}
+
 export interface GoogleAuthenticationPlugin {
-  initialize(config: FirebaseOptions): Promise<{ result: 'success' | 'error'}>;
+  initialize(config: GoogleAuthenticationOptions): Promise<{ result: 'success' | 'error'}>;
 
   verifyPhoneNumber(options: { phone: string }): Promise<{ result: 'success' | 'error'}>;
 

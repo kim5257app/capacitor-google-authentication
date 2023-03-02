@@ -1,6 +1,5 @@
 import { WebPlugin } from '@capacitor/core';
 import { initializeApp } from 'firebase/app';
-import type { FirebaseOptions } from 'firebase/app';
 import {
   getAuth,
   onAuthStateChanged,
@@ -13,7 +12,7 @@ import {
 } from 'firebase/auth';
 import type { ConfirmationResult, Auth } from 'firebase/auth';
 
-import type { GoogleAuthenticationPlugin } from './definitions';
+import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';
 
 export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenticationPlugin {
   private firebaseAuth: Auth | null = null;
@@ -28,7 +27,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     super();
   }
 
-  async initialize(config: FirebaseOptions): Promise<{ result: 'success' | 'error'}> {
+  async initialize(config: GoogleAuthenticationOptions): Promise<{ result: 'success' | 'error'}> {
     this.firebaseAuth = getAuth(initializeApp(config));
 
     console.log('initialize:', this.firebaseAuth);
