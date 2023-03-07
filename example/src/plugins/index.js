@@ -1,5 +1,5 @@
 /**
- * plugins/index.js
+ * plugins/firebase.js
  *
  * Automatically included in `./src/main.js`
  */

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import capacitor from '@/capacitor';
+import capacitor from '@/capacitor/firebase';
 
 export default {
   name: 'EmailLogin',

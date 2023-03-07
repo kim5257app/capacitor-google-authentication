@@ -30,6 +30,12 @@ const routes = [
     ],
     meta: { needNonAuth: true },
   },
+  {
+    path: '/logincallback',
+    name: 'LoginCallback',
+    component: () => import(/* webpackChunkName: "home" */ '@/views/login/LoginCallback.vue'),
+    props: (route) => ({ provider: route.query.provider, token: route.query.token }),
+  },
 ]
 
 const router = createRouter({

@@ -1,9 +1,11 @@
 <template>
   <button
-    @click="onClick"
     class="firebaseui-idp-button mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button" data-provider-id="google.com" style="background-color:#ffffff" data-upgraded=",MaterialButton">
     <span class="firebaseui-idp-icon-wrapper">
-      <img class="firebaseui-idp-icon" alt="" src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
+      <img
+        class="firebaseui-idp-icon"
+        alt=""
+        :src="loginGoogleIcon">
     </span>
     <span class="firebaseui-idp-text firebaseui-idp-text-long">
       Sign in with Google
@@ -15,18 +17,13 @@
 </template>
 
 <script>
-import loginGoogleIcon from '@/assets/login/google_buttn.svg';
+import loginGoogleIcon from '@/assets/login/google_button.svg';
 
 export default {
   name: 'BtnGoogleLogin',
   data: () => ({
     loginGoogleIcon,
   }),
-  methods: {
-    onClick(event) {
-      this.$emit('click', event);
-    },
-  },
 };
 </script>
 

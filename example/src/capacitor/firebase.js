@@ -72,6 +72,8 @@ export default {
   createUserWithEmailAndPassword: GoogleAuthentication.createUserWithEmailAndPassword,
   signInWithEmailAndPassword: GoogleAuthentication.signInWithEmailAndPassword,
   signInWithGoogle: GoogleAuthentication.signInWithGoogle,
+  signInWithCustomToken: GoogleAuthentication.signInWithCustomToken,
+  signInWithKakao: GoogleAuthentication.signInWithKakao,
   getIdToken: GoogleAuthentication.getIdToken,
   signOut: GoogleAuthentication.signOut,
   echo: GoogleAuthentication.echo,

@@ -70,4 +70,7 @@ dependencies {
     implementation "com.google.firebase:firebase-analytics-ktx:$firebaseAnalyticsVersion"
     implementation "com.google.firebase:firebase-auth-ktx:$firebaseAuthVersion"
     implementation "com.google.android.gms:play-services-auth:$googlePlayAuthVersion"
+
+    // Kakao
+    implementation "com.kakao.sdk:v2-user:2.13.0"
 }

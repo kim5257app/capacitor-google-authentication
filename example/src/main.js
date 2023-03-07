@@ -14,7 +14,8 @@ import { createApp } from 'vue';
 import { registerPlugins } from '@/plugins';
 
 // Capacitor
-import '@/capacitor';
+import '@/capacitor/firebase';
+import '@/capacitor/kakao';
 
 const app = createApp(App)
 
