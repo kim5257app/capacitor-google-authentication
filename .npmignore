@@ -1,0 +1,8 @@
+.vscode
+node_modules/
+.eslint.cjs
+.gitignore
+.npmignore
+vite.config.js
+yarn.lock
+example
