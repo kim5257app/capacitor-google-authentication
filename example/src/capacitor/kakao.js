@@ -10,4 +10,5 @@ console.log('KakaoAuthentication:', KakaoAuthentication);
 export default {
   signIn: KakaoAuthentication.signIn,
   callback: KakaoAuthentication.callback,
+  addListener: KakaoAuthentication.addListener,
 };

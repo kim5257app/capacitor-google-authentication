@@ -19,7 +19,7 @@ npx cap sync
 * [`createUserWithEmailAndPassword(...)`](#createuserwithemailandpassword)
 * [`signInWithEmailAndPassword(...)`](#signinwithemailandpassword)
 * [`signInWithGoogle()`](#signinwithgoogle)
-* [`signInWithKakao()`](#signinwithkakao)
+* [`signInWithCustomToken(...)`](#signinwithcustomtoken)
 * [`getIdToken(...)`](#getidtoken)
 * [`signOut()`](#signout)
 * [`echo(...)`](#echo)
@@ -120,11 +120,15 @@ signInWithGoogle() => Promise<{ result: "success" | "error"; idToken: string; }>
 --------------------
 
 
-### signInWithKakao()
+### signInWithCustomToken(...)
 
 ```typescript
-signInWithKakao() => Promise<{ result: "success" | "error"; idToken: string; }>
+signInWithCustomToken({ customToken }: { customToken: string; }) => Promise<{ result: "success" | "error"; idToken: string; }>
 ```
+
+| Param     | Type                                  |
+| --------- | ------------------------------------- |
+| **`__0`** | <code>{ customToken: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
 

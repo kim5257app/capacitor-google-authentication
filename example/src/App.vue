@@ -5,25 +5,33 @@
 </template>
 
 <script>
-import capacitor from '@/capacitor/firebase';
+import capFirebase from '@/capacitor/firebase';
+import capKakao from '@/capacitor/kakao';
 
 export default {
   name: 'App',
   data: () => ({
-    capacitor,
+    capFirebase,
+    capKakao,
   }),
   mounted() {
-    console.log('this.googleAuth:', this.capacitor);
+    console.log('this.googleAuth:', this.capFirebase);
 
-    this.capacitor.addListener('google.auth.phone.verify.completed', () => {
+    this.capKakao.addListener('kakao.auth.verify.completed', async ({ token }) => {
+      console.log('KakaoLogin:', token);
+
+      await this.capFirebase.signInWithCustomToken({ customToken: token });
+    });
+
+    this.capFirebase.addListener('google.auth.phone.verify.completed', () => {
       console.log('confirmed');
     });
 
-    this.capacitor.addListener('google.auth.phone.verify.failed', (error) => {
+    this.capFirebase.addListener('google.auth.phone.verify.failed', (error) => {
       console.log('error:', error);
     });
 
-    this.capacitor.addListener('google.auth.state.update', ({ idToken }) => {
+    this.capFirebase.addListener('google.auth.state.update', ({ idToken }) => {
       console.log('state update:', idToken);
     });
   },

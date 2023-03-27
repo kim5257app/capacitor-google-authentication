@@ -16,6 +16,8 @@ export class KakaoAuthenticationWeb extends WebPlugin {
       redirectUri: kakaoGetTokenPath,
       prompts: 'login',
     });
+
+    return { result: 'success' };
   }
 
   async callback({ token }) {
@@ -27,8 +29,15 @@ export class KakaoAuthenticationWeb extends WebPlugin {
       }
     });
 
+    this.notifyListeners('kakao.auth.verify.completed', {
+      token: resp.data.token,
+    });
+
     console.log('callback:', resp);
 
-    return resp.data.token;
+    return {
+      result: 'success',
+      token: resp.data.token,
+    };
   }
 }

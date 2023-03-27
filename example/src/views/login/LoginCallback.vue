@@ -25,11 +25,7 @@ export default {
 
     switch (this.provider) {
       case 'kakao': {
-        const firebaseToken = await capKakao.callback({ token: this.token });
-
-        console.log('LoginCallback:', firebaseToken);
-
-        await capFirebase.signInWithCustomToken({ customToken: firebaseToken });
+        await capKakao.callback({ token: this.token });
         break;
       }
     }

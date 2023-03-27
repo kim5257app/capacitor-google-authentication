@@ -1,5 +1,5 @@
 export default {
-  input: 'dist/esm/firebase.js',
+  input: 'dist/esm/index.js',
   output: [
     {
       file: 'dist/plugin.js',

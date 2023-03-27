@@ -336,6 +336,36 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun signInWithCustomToken(call: PluginCall) {
+        try {
+            var token = ""
+            val customToken = call.getString("customToken")?:""
+
+            runBlocking {
+                val result = FirebaseAuth.getInstance().signInWithCustomToken(customToken).await()
+                token = result.user?.getIdToken(false)?.await()?.token?:""
+            }
+
+            this.notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                this.put("idToken", token)
+            })
+
+            call.resolve(JSObject().apply {
+                this.put("result", "success")
+                this.put("idToken", token)
+            })
+        } catch (exception: Exception) {
+            call.reject(
+                exception.message,
+                JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", exception.message)
+                }
+            )
+        }
+    }
+
+    @PluginMethod
     fun getIdToken(call: PluginCall) {
         try {
             val user = FirebaseAuth.getInstance().currentUser
