@@ -7,13 +7,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  // signInWithRedirect,
-  // getRedirectResult,
-  signInWithCredential,
   signInWithCustomToken,
   RecaptchaVerifier,
   GoogleAuthProvider,
-  OAuthProvider,
 } from 'firebase/auth';
 
 import type { ConfirmationResult, Auth, User } from 'firebase/auth';
@@ -197,38 +193,6 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       result: 'success',
       idToken,
     });
-  }
-
-  async signInWithKakao(): Promise<{ result: "success" | "error"; idToken: string }> {
-    if (this.firebaseAuth == null) {
-      throw {
-        result: 'error',
-        message: 'Not initialized',
-      }
-    }
-
-    const provider = new OAuthProvider('oidc.kakao_module');
-
-    // const result = await signInWithPopup(this.firebaseAuth, provider);
-    const kakaoCredential = provider.credential({ idToken: 'eyJraWQiOiI5ZjI1MmRhZGQ1ZjIzM2Y5M2QyZmE1MjhkMTJmZWEiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9' });
-
-    // const credential = OAuthProvider.credentialFromResult(result);
-
-    const result = await signInWithCredential(this.firebaseAuth, kakaoCredential);
-
-    const credential = OAuthProvider.credentialFromResult(result);
-
-    if (credential == null) {
-      throw {
-        result: 'error',
-        message: 'Sign in failed',
-      }
-    }
-
-    return {
-      idToken: (credential.idToken != null) ? credential.idToken : '',
-      result: 'success'
-    };
   }
 
   async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{ result: "success" | "error"; idToken: string }> {

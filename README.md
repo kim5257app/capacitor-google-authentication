@@ -18,10 +18,8 @@ npx cap sync
 * [`confirmPhoneNumber(...)`](#confirmphonenumber)
 * [`createUserWithEmailAndPassword(...)`](#createuserwithemailandpassword)
 * [`signInWithEmailAndPassword(...)`](#signinwithemailandpassword)
-* [`signInWithCustomToken(...)`](#signinwithcustomtoken)
 * [`signInWithGoogle()`](#signinwithgoogle)
-* [`signInWithKakao()`](#signinwithkakao)
-* [`getCurrentUser()`](#getcurrentuser)
+* [`signInWithCustomToken(...)`](#signinwithcustomtoken)
 * [`getIdToken(...)`](#getidtoken)
 * [`signOut()`](#signout)
 * [`echo(...)`](#echo)
@@ -112,21 +110,6 @@ signInWithEmailAndPassword(options: { email: string; password: string; }) => Pro
 --------------------
 
 
-### signInWithCustomToken(...)
-
-```typescript
-signInWithCustomToken({ customToken }: { customToken: string; }) => Promise<{ result: "success" | "error"; idToken: string; }>
-```
-
-| Param     | Type                                  |
-| --------- | ------------------------------------- |
-| **`__0`** | <code>{ customToken: string; }</code> |
-
-**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
-
---------------------
-
-
 ### signInWithGoogle()
 
 ```typescript
@@ -138,11 +121,15 @@ signInWithGoogle() => Promise<{ result: "success" | "error"; idToken: string; }>
 --------------------
 
 
-### signInWithKakao()
+### signInWithCustomToken(...)
 
 ```typescript
-signInWithKakao() => Promise<{ result: "success" | "error"; idToken: string; }>
+signInWithCustomToken({ customToken }: { customToken: string; }) => Promise<{ result: "success" | "error"; idToken: string; }>
 ```
+
+| Param     | Type                                  |
+| --------- | ------------------------------------- |
+| **`__0`** | <code>{ customToken: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
 
@@ -363,6 +350,8 @@ Interface representing a user's metadata.
 
 Construct a type with a set of properties K of type T
 
-<code>{ [P in K]: T; }</code>
+<code>{
+ [P in K]: T;
+ }</code>
 
 </docgen-api>
