@@ -1,5 +1,6 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 import type { FirebaseOptions } from 'firebase/app';
+import type { User } from 'firebase/auth';
 
 export interface GoogleAuthenticationOptions extends FirebaseOptions {
   googleClientId: string;
@@ -21,6 +22,8 @@ export interface GoogleAuthenticationPlugin {
   signInWithGoogle(): Promise<{ result: "success" | "error"; idToken: string }>;
 
   signInWithKakao(): Promise<{ result: "success" | "error"; idToken: string }>;
+
+  getCurrentUser(): Promise<{ result: 'success' | 'error'; user: User | null | undefined }>;
 
   getIdToken(options: { forceRefresh: boolean })
     : Promise<{

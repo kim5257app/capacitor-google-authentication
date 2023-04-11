@@ -1,8 +1,8 @@
 export default {
-  input: 'dist/esm/firebase.js',
+  input: 'dist/esm/index.js',
   output: [
     {
-      file: 'dist/plugin.js',
+      file: 'dist/index.js',
       format: 'iife',
       name: 'capacitorGoogleAuthentication',
       globals: {
@@ -14,7 +14,7 @@ export default {
       inlineDynamicImports: true,
     },
     {
-      file: 'dist/plugin.cjs.js',
+      file: 'dist/index.cjs.js',
       format: 'cjs',
       sourcemap: true,
       inlineDynamicImports: true,

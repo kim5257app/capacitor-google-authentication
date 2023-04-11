@@ -374,6 +374,30 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun getCurrentUser(call: PluginCall) {
+        val curUser = FirebaseAuth.getInstance().currentUser
+
+        val user = if (curUser != null) {
+            JSObject().apply {
+                this.put("email", curUser.email)
+                this.put("displayName", curUser.displayName)
+                this.put("phoneNumber", curUser.phoneNumber)
+                this.put("photoUrl", curUser.photoUrl)
+                this.put("isEmailVerified", curUser.isEmailVerified)
+                this.put("providerId", curUser.providerId)
+                this.put("uid", curUser.uid)
+            }
+        } else {
+            null
+        }
+
+        call.resolve(JSObject().apply {
+            this.put("result", "success")
+            this.put("user", user)
+        })
+    }
+
+    @PluginMethod
     fun signOut(call: PluginCall) {
         FirebaseAuth.getInstance().signOut()
         call.resolve(JSObject().apply {

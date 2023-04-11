@@ -1,11 +1,11 @@
 {
   "name": "@kim5257/capacitor-google-authentication",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "Google Authentication Capacitor Plugin",
-  "main": "dist/plugin.cjs.js",
+  "main": "dist/index.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
-  "unpkg": "dist/plugin.js",
+  "unpkg": "dist/index.js",
   "files": [
     "android/src/main/",
     "android/build.gradle",

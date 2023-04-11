@@ -15,7 +15,8 @@ import {
   GoogleAuthProvider,
   OAuthProvider,
 } from 'firebase/auth';
-import type { ConfirmationResult, Auth } from 'firebase/auth';
+
+import type { ConfirmationResult, Auth, User } from 'firebase/auth';
 
 import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';
 
@@ -244,6 +245,13 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       result: 'success',
       idToken: (idToken != null) ? idToken : '',
     });
+  }
+
+  async getCurrentUser(): Promise<{ result: 'success' | 'error'; user: User | null | undefined }> {
+    return {
+      result: 'success',
+      user: this.firebaseAuth?.currentUser,
+    };
   }
 
   async signOut(): Promise<{ result: "success" | "error" }> {

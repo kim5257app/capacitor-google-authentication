@@ -4,9 +4,9 @@ ext {
     androidxJunitVersion = project.hasProperty('androidxJunitVersion') ? rootProject.ext.androidxJunitVersion : '1.1.5'
     androidxEspressoCoreVersion = project.hasProperty('androidxEspressoCoreVersion') ? rootProject.ext.androidxEspressoCoreVersion : '3.5.1'
     firebaseVersion = project.hasProperty('firebaseVersion') ? rootProject.ext.firebaseVersion : '31.2.2'
-    firebaseAnalyticsVersion = project.hasProperty('firebaseAnalyticsVersion') ? rootProject.ext.firebaseAnalyticsVersion : '21.2.0'
-    firebaseAuthVersion = project.hasProperty('firebaseAuthVersion') ? rootProject.ext.firebaseAuthVersion : '21.1.0'
-    googlePlayAuthVersion = project.hasProperty('googlePlayAuthVersion') ? rootProject.ext.googlePlayAuthVersion : '20.4.1'
+    firebaseAnalyticsVersion = project.hasProperty('firebaseAnalyticsVersion') ? rootProject.ext.firebaseAnalyticsVersion : '21.2.1'
+    firebaseAuthVersion = project.hasProperty('firebaseAuthVersion') ? rootProject.ext.firebaseAuthVersion : '21.2.0'
+    googlePlayAuthVersion = project.hasProperty('googlePlayAuthVersion') ? rootProject.ext.googlePlayAuthVersion : '20.5.0'
 }
 
 buildscript {
@@ -60,7 +60,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
-    implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.core:core-ktx:1.10.0'
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
@@ -70,7 +70,4 @@ dependencies {
     implementation "com.google.firebase:firebase-analytics-ktx:$firebaseAnalyticsVersion"
     implementation "com.google.firebase:firebase-auth-ktx:$firebaseAuthVersion"
     implementation "com.google.android.gms:play-services-auth:$googlePlayAuthVersion"
-
-    // Kakao
-    implementation "com.kakao.sdk:v2-user:2.13.0"
 }
