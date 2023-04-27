@@ -11,7 +11,6 @@ import {
   RecaptchaVerifier,
   GoogleAuthProvider,
 } from 'firebase/auth';
-
 import type { ConfirmationResult, Auth, User } from 'firebase/auth';
 
 import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';

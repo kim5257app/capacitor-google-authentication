@@ -21,13 +21,13 @@ export interface GoogleAuthenticationPlugin {
 
   signInWithCustomToken({ customToken }: { customToken: string }): Promise<{ result: "success" | "error"; idToken: string }>;
 
-  getCurrentUser(): Promise<{ result: 'success' | 'error'; user: User | null | undefined }>;
-
   getIdToken(options: { forceRefresh: boolean })
     : Promise<{
       result: 'success' | 'error';
       idToken: string;
     }>;
+
+  getCurrentUser(): Promise<{ result: 'success' | 'error'; user: User | null | undefined }>;
 
   signOut(): Promise<{ result: 'success' | 'error' }>;
 

@@ -39,12 +39,12 @@ class GoogleAuthenticationPlugin : Plugin() {
             if (firebaseAuth.currentUser != null) {
                 firebaseAuth.currentUser!!.getIdToken(true).addOnSuccessListener { getTokenResult ->
                     notifyListeners("google.auth.state.update", JSObject().apply {
-                        this.put("idToken", getTokenResult.token);
+                        this.put("idToken", getTokenResult.token)
                     })
                 }
             } else {
                 notifyListeners("google.auth.state.update", JSObject().apply {
-                    this.put("idToken", "");
+                    this.put("idToken", "")
                 })
             }
         }
@@ -79,7 +79,7 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     private fun getIdToken(user: FirebaseUser, forceRefresh: Boolean): String {
-        var token = ""
+        var token: String
 
         runBlocking {
             token = user.getIdToken(forceRefresh).await().token?:""
@@ -89,7 +89,7 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     private fun getIdToken(credential: AuthCredential): String {
-        var token = ""
+        var token: String
 
         runBlocking {
             val firebaseUser = FirebaseAuth.getInstance()
@@ -338,7 +338,7 @@ class GoogleAuthenticationPlugin : Plugin() {
     @PluginMethod
     fun signInWithCustomToken(call: PluginCall) {
         try {
-            var token = ""
+            var token: String
             val customToken = call.getString("customToken")?:""
 
             runBlocking {
