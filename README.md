@@ -21,6 +21,9 @@ npx cap sync
 * [`signInWithGoogle()`](#signinwithgoogle)
 * [`signInWithCustomToken(...)`](#signinwithcustomtoken)
 * [`getIdToken(...)`](#getidtoken)
+* [`getCurrentUser()`](#getcurrentuser)
+* [`updateProfile(...)`](#updateprofile)
+* [`updateEmail(...)`](#updateemail)
 * [`signOut()`](#signout)
 * [`echo(...)`](#echo)
 * [`addListener('google.auth.phone.verify.completed', ...)`](#addlistenergoogleauthphoneverifycompleted)
@@ -53,12 +56,12 @@ initialize(config: GoogleAuthenticationOptions) => Promise<{ result: 'success' |
 ### verifyPhoneNumber(...)
 
 ```typescript
-verifyPhoneNumber(options: { phone: string; }) => Promise<{ result: 'success' | 'error'; }>
+verifyPhoneNumber(options: { phone: string; elem?: HTMLElement; }) => Promise<{ result: 'success' | 'error'; }>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ phone: string; }</code> |
+| Param         | Type                                        |
+| ------------- | ------------------------------------------- |
+| **`options`** | <code>{ phone: string; elem?: any; }</code> |
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
 
@@ -136,17 +139,6 @@ signInWithCustomToken({ customToken }: { customToken: string; }) => Promise<{ re
 --------------------
 
 
-### getCurrentUser()
-
-```typescript
-getCurrentUser() => Promise<{ result: 'success' | 'error'; user: User | null | undefined; }>
-```
-
-**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; user: <a href="#user">User</a> | null; }&gt;</code>
-
---------------------
-
-
 ### getIdToken(...)
 
 ```typescript
@@ -158,6 +150,47 @@ getIdToken(options: { forceRefresh: boolean; }) => Promise<{ result: 'success' |
 | **`options`** | <code>{ forceRefresh: boolean; }</code> |
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
+
+--------------------
+
+
+### getCurrentUser()
+
+```typescript
+getCurrentUser() => Promise<{ result: 'success' | 'error'; user: User | null | undefined; }>
+```
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; user: <a href="#user">User</a> | null; }&gt;</code>
+
+--------------------
+
+
+### updateProfile(...)
+
+```typescript
+updateProfile(options: { displayName?: string; photoUri?: string; }) => Promise<{ result: 'success' | 'error'; }>
+```
+
+| Param         | Type                                                      |
+| ------------- | --------------------------------------------------------- |
+| **`options`** | <code>{ displayName?: string; photoUri?: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
+
+--------------------
+
+
+### updateEmail(...)
+
+```typescript
+updateEmail(options: { email: string; }) => Promise<{ result: 'success' | 'error'; }>
+```
+
+| Param         | Type                            |
+| ------------- | ------------------------------- |
+| **`options`** | <code>{ email: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
 
 --------------------
 
@@ -350,8 +383,6 @@ Interface representing a user's metadata.
 
 Construct a type with a set of properties K of type T
 
-<code>{
- [P in K]: T;
- }</code>
+<code>{ [P in K]: T; }</code>
 
 </docgen-api>

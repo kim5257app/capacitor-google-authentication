@@ -1,5 +1,6 @@
 package com.kim5257.capacitor.plugins.authentication.google
 
+import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.IntentSenderRequest
@@ -15,6 +16,7 @@ import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
@@ -425,6 +427,64 @@ class GoogleAuthenticationPlugin : Plugin() {
             this.put("result", "success")
             this.put("user", user)
         })
+    }
+
+    @PluginMethod
+    fun updateProfile(call: PluginCall) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        if (currentUser != null) {
+            val profileChangeRequest = userProfileChangeRequest {
+                call.getString("displayName")?.let {
+                    this.displayName = it
+                }
+
+                call.getString("photoUri")?.let {
+                    this.photoUri = Uri.parse(it)
+                }
+            }
+
+            currentUser.updateProfile(profileChangeRequest).addOnSuccessListener {
+                call.resolve(JSObject().apply {
+                    this.put("result", "success")
+                })
+            }.addOnFailureListener {
+                call.reject(it.message, JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", it.message)
+                })
+            }
+        } else {
+            call.reject("Not initialized", JSObject().apply {
+                this.put("result", "error")
+                this.put("message", "Not initialized")
+            })
+        }
+    }
+
+    @PluginMethod
+    fun updateEmail(call: PluginCall) {
+        val currentUser = FirebaseAuth.getInstance().currentUser
+
+        if (currentUser != null) {
+            val email = call.getString("email")?:""
+
+            currentUser.updateEmail(email).addOnSuccessListener {
+                call.resolve(JSObject().apply {
+                    this.put("result", "success")
+                })
+            }.addOnFailureListener {
+                call.reject(it.message, JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", it.message)
+                })
+            }
+        } else {
+            call.reject("Not initialized", JSObject().apply {
+                this.put("result", "error")
+                this.put("message", "Not initialized")
+            })
+        }
     }
 
     @PluginMethod

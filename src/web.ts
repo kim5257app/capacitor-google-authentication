@@ -8,6 +8,8 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signInWithCustomToken,
+  updateProfile as updateFirebaseProfile,
+  updateEmail as updateFirebaseEmail,
   RecaptchaVerifier,
   GoogleAuthProvider,
 } from 'firebase/auth';
@@ -216,6 +218,26 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       result: 'success',
       user: this.firebaseAuth?.currentUser,
     };
+  }
+
+  async updateProfile(options: { displayName?: string; photoUri?: string; }): Promise<{ result: 'success' | 'error' }> {
+    const user = this.firebaseAuth?.currentUser;
+
+    if (user != null) {
+      await updateFirebaseProfile(user, options);
+    }
+
+    return { result: 'success' };
+  }
+
+  async updateEmail(options: { email: string }): Promise<{ result: 'success' | 'error' }> {
+    const user = this.firebaseAuth?.currentUser;
+
+    if (user != null) {
+      await updateFirebaseEmail(user, options.email);
+    }
+
+    return { result: 'success' };
   }
 
   async signOut(): Promise<{ result: "success" | "error" }> {

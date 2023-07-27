@@ -9,7 +9,7 @@ export interface GoogleAuthenticationOptions extends FirebaseOptions {
 export interface GoogleAuthenticationPlugin {
   initialize(config: GoogleAuthenticationOptions): Promise<{ result: 'success' | 'error'}>;
 
-  verifyPhoneNumber(options: { phone: string }): Promise<{ result: 'success' | 'error'}>;
+  verifyPhoneNumber(options: { phone: string, elem?: HTMLElement }): Promise<{ result: 'success' | 'error'}>;
 
   confirmPhoneNumber(options: { code: string }): Promise<{ result: 'success' | 'error' }>;
 
@@ -28,6 +28,10 @@ export interface GoogleAuthenticationPlugin {
     }>;
 
   getCurrentUser(): Promise<{ result: 'success' | 'error'; user: User | null | undefined }>;
+
+  updateProfile(options: { displayName?: string; photoUri?: string; }): Promise<{ result: 'success' | 'error' }>;
+
+  updateEmail(options: { email: string }): Promise<{ result: 'success' | 'error' }>;
 
   signOut(): Promise<{ result: 'success' | 'error' }>;
 
