@@ -78,6 +78,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       this.notifyListeners('google.auth.phone.verify.failed', { message: error.message });
 
       throw {
+        ...error,
         result: 'error',
         message: error.message,
       }
