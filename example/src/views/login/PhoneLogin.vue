@@ -41,6 +41,7 @@
 
 <script>
 import capacitor from '@/capacitor/firebase';
+import { Capacitor } from '@capacitor/core';
 
 export default {
   name: 'PhoneLogin',
@@ -88,12 +89,17 @@ export default {
     });
   },
   methods: {
-    verifyPhone() {
+    async verifyPhone() {
       this.loading.verifyPhone = true;
-      this.capacitor.verifyPhoneNumber({
-        phone: this.form.phone,
-        elem: this.$refs.recaptcha,
-      });
+
+      const { value } = await this.capacitor.echo({ value: 'TEST TEST' });
+      console.log('verifyPhone:', value);
+
+      const args = (Capacitor.getPlatform() === 'web')
+        ? { phone: this.form.phone, elem: this.$refs.recaptcha }
+        : { phone: this.form.phone }
+
+      await this.capacitor.verifyPhoneNumber(args);
       this.resetRemainTime();
     },
     resetRemainTime() {

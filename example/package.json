@@ -8,7 +8,9 @@
     "lint": "eslint . --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@capacitor/android": "^5.2.2",
     "@capacitor/core": "^4.7.0",
+    "@capacitor/ios": "^5.2.2",
     "@kim5257/capacitor-google-authentication": "../",
     "@mdi/font": "7.0.96",
     "axios": "^1.3.4",

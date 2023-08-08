@@ -6,7 +6,7 @@
           :max-width="540">
           <v-card-text>
             <v-btn
-              @click="capacitor.signOut"
+              @click="capacitor.signOut()"
               color="primary"
               block>
               로그아웃

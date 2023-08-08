@@ -7,6 +7,11 @@
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.21.1.tgz#a8f81ee2fe872af23faea4b17a08fcc869de7bcc"
   integrity sha512-JzhBFpkuhBNYUY7qs+wTzNmyCWUHEaAFpQQD2YfU1rPL38/L43Wvid0fFkiOCnHvsGncRZgEPyGnltABLcVDTg==
 
+"@capacitor/android@^5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-5.2.2.tgz#9f2cfd5b81f96deecc22d77aee9a3161c14c70b4"
+  integrity sha512-2kx5C2lJ/DSwPWS7fKvextWhg4AK3SQvQnHgp8+WX6SDYgphBNlGUh45N/qBoMeVM7lqjANJFGQDCk0FjimlWQ==
+
 "@capacitor/cli@^4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@capacitor/cli/-/cli-4.7.0.tgz#eefb5e33b9a3706a042c24af9d2e8dd353751c93"
@@ -36,6 +41,11 @@
   integrity sha512-LkjHnIoufojVjCZXogEbotN2utXxfo6TvpSgWaYndRPm/SrPFCWM8bPf/WNd8MozOkPFgcxlZnZlGHFGTeydWQ==
   dependencies:
     tslib "^2.1.0"
+
+"@capacitor/ios@^5.2.2":
+  version "5.2.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/ios/-/ios-5.2.2.tgz#209cc3b15199325f3f5515f7a208ff9830482f52"
+  integrity sha512-6nNhB+G9tamJFMdvPOIATEPIXlh3GNXMq8eeY3xrFO72bBTmQpXdbDQmMJeBbpVlkEnFoVUXiSxAu6O0E9x9Lw==
 
 "@esbuild/android-arm@0.15.18":
   version "0.15.18"
@@ -568,7 +578,7 @@
     wrap-ansi "^7.0.0"
 
 "@kim5257/capacitor-google-authentication@../":
-  version "0.0.1"
+  version "0.0.5"
   dependencies:
     firebase "^9.17.1"
 
