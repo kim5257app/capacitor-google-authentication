@@ -7,6 +7,8 @@ CAP_PLUGIN(GoogleAuthenticationPlugin, "GoogleAuthentication",
            CAP_PLUGIN_METHOD(initialize, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(verifyPhoneNumber, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(confirmPhoneNumber, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(createUserWithEmailAndPassword, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(signInWithEmailAndPassword, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getIdToken, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getCurrentUser, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(updateProfile, CAPPluginReturnPromise);

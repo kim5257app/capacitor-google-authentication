@@ -158,6 +158,75 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
         }
     }
 
+    @objc func createUserWithEmailAndPassword(_ call: CAPPluginCall) {
+        let email = call.getString("email") ?? ""
+        let password = call.getString("password") ?? ""
+
+        Auth.auth().createUser(withEmail: email, password: password) { (authDataResult, error) in
+            if let error = error as? NSError {
+                let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+
+                call.reject(error.localizedDescription, code, error, [
+                    "result": "error",
+                    "code": code,
+                    "message": error.localizedDescription,
+                ])
+            } else {
+                authDataResult?.user.getIDToken(completion: { (token, error) in
+                    if let error = error as? NSError {
+                        let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+
+                        call.reject(error.localizedDescription, code, error, [
+                            "result": "error",
+                            "code": code,
+                            "message": error.localizedDescription,
+                        ])
+                    } else {
+                        self.notifyListeners("google.auth.phone.verify.completed", data: [
+                            "idToken": token!
+                        ])
+                    }
+                })
+            }
+        }
+    }
+
+    @objc func signInWithEmailAndPassword(_ call: CAPPluginCall) {
+        let email = call.getString("email") ?? ""
+        let password = call.getString("password") ?? ""
+
+        Auth.auth().signIn(withEmail: email, password: password) { (authDataResult, error) in
+            if let error = error as? NSError {
+                let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+
+                call.reject(error.localizedDescription, code, error, [
+                    "result": "error",
+                    "code": code,
+                    "message": error.localizedDescription,
+                ])
+            } else {
+                authDataResult?.user.getIDToken(completion: { (token, error) in
+                    if let error = error as? NSError {
+                        let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+
+                        call.reject(error.localizedDescription, code, error, [
+                            "result": "error",
+                            "code": code,
+                            "message": error.localizedDescription,
+                        ])
+                    } else {
+                        self.notifyListeners("google.auth.phone.verify.completed", data: [
+                            "idToken": token!
+                        ])
+                    }
+                })
+            }
+        }
+    }
+
+    @objc func signWithGoogle(_ call: CAPPluginCall) {
+    }
+
     @objc func getIdToken(_ call: CAPPluginCall) {
         let user = Auth.auth().currentUser
         let forceRefresh = call.getBool("forceRefresh") ?? false
@@ -274,10 +343,12 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
     @objc func signOut(_ call: CAPPluginCall) {
         do {
             try Auth.auth().signOut()
-        } catch {
-            call.reject(error.localizedDescription, "ERR_UNKNOWN", error, [
+        } catch let error as NSError {
+            let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+
+            call.reject(error.localizedDescription, code, error, [
                 "result": "error",
-                "code": "ERR_UNKNOWN",
+                "code": code,
                 "message": error.localizedDescription,
             ])
         }
