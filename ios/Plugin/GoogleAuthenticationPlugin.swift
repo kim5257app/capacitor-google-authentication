@@ -69,7 +69,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     domain: "GoogleAuthenticationPlugin",
                     code: 0,
                     userInfo: [
-                        "code": "WRONG_VALUE",
+                        "code": "ERROR_WRONG_VALUE",
                         "message": "Invalid phone number",
                     ]
                 )
@@ -112,7 +112,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     domain: "GoogleAuthenticationPlugin",
                     code: 0,
                     userInfo: [
-                        "code": "WRONG_VALUE",
+                        "code": "ERROR_WRONG_VALUE",
                         "message": "Invalid verification ID",
                     ]
                 )
@@ -289,7 +289,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             }
         }
     }
-    
+
     @objc func getIdToken(_ call: CAPPluginCall) {
         let user = Auth.auth().currentUser
         let forceRefresh = call.getBool("forceRefresh") ?? false
@@ -371,7 +371,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
         } else {
             call.reject("Not initialized", "NOT_INITIALIZED", nil, [
                 "result": "error",
-                "code": "NOT_INITIALIZED",
+                "code": "ERROR_NOT_INITIALIZED",
                 "message": "Not initialized",
             ])
         }
@@ -397,7 +397,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
         } else {
             call.reject("Not initialized", "NOT_INITIALIZED", nil, [
                 "result": "error",
-                "code": "NOT_INITIALIZED",
+                "code": "ERROR_NOT_INITIALIZED",
                 "message": "Not initialized",
             ])
         }
