@@ -53,6 +53,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       if (this.firebaseAuth == null) {
         throw {
           result: 'error',
+          code: 'ERROR_NOT_INITIALIZED',
           message: 'Not initialized',
         }
       }
