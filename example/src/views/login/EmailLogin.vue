@@ -55,7 +55,13 @@ export default {
     async signIn() {
       try {
         this.loading.signIn = true;
-        await capacitor.signInWithEmailAndPassword(this.form);
+
+        console.log('this.form:', this.form);
+
+        await capacitor.signInWithEmailAndPassword({
+          email: this.form.email,
+          password: this.form.password,
+        });
       } catch (error) {
         console.error(error);
 
@@ -68,7 +74,10 @@ export default {
     },
     async createUser() {
       try {
-        await capacitor.createUserWithEmailAndPassword(this.form);
+        await capacitor.createUserWithEmailAndPassword({
+          email: this.form.email,
+          password: this.form.password,
+        });
       } catch (error) {
         console.error(error);
 
