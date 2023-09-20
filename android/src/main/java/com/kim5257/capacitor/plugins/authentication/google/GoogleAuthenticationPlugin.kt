@@ -36,22 +36,6 @@ class GoogleAuthenticationPlugin : Plugin() {
 
     private lateinit var resultLauncher: ActivityResultLauncher<IntentSenderRequest>
 
-    init {
-        FirebaseAuth.getInstance().addAuthStateListener {firebaseAuth ->
-            if (firebaseAuth.currentUser != null) {
-                firebaseAuth.currentUser!!.getIdToken(true).addOnSuccessListener { getTokenResult ->
-                    notifyListeners("google.auth.state.update", JSObject().apply {
-                        this.put("idToken", getTokenResult.token)
-                    })
-                }
-            } else {
-                notifyListeners("google.auth.state.update", JSObject().apply {
-                    this.put("idToken", "")
-                })
-            }
-        }
-    }
-
     override fun load() {
         super.load()
 
@@ -105,6 +89,20 @@ class GoogleAuthenticationPlugin : Plugin() {
 
     @PluginMethod
     fun initialize(call: PluginCall) {
+        FirebaseAuth.getInstance().addAuthStateListener { firebaseAuth ->
+            if (firebaseAuth.currentUser != null) {
+                firebaseAuth.currentUser!!.getIdToken(true).addOnSuccessListener { getTokenResult ->
+                    notifyListeners("google.auth.state.update", JSObject().apply {
+                        this.put("idToken", getTokenResult.token)
+                    })
+                }
+            } else {
+                notifyListeners("google.auth.state.update", JSObject().apply {
+                    this.put("idToken", "")
+                })
+            }
+        }
+
         this.googleClientId = call.getString("googleClientId")?:""
 
         call.resolve(JSObject().apply {
