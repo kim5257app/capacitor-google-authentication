@@ -407,6 +407,8 @@ class GoogleAuthenticationPlugin : Plugin() {
     fun getCurrentUser(call: PluginCall) {
         val curUser = FirebaseAuth.getInstance().currentUser
 
+        val accessToken = FirebaseAuth.getInstance().getAccessToken(false)
+
         val user = if (curUser != null) {
             JSObject().apply {
                 this.put("email", curUser.email)
@@ -416,6 +418,7 @@ class GoogleAuthenticationPlugin : Plugin() {
                 this.put("isEmailVerified", curUser.isEmailVerified)
                 this.put("providerId", curUser.providerId)
                 this.put("uid", curUser.uid)
+                this.put("accessToken", accessToken)
             }
         } else {
             null
