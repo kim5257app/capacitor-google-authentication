@@ -308,13 +308,13 @@ A user account.
 | **`refreshToken`**  | <code>string</code>                                   | Refresh token used to reauthenticate the user. Avoid using this directly and prefer {@link <a href="#user">User.getIdToken</a>} to refresh the ID token instead. |
 | **`tenantId`**      | <code>string \| null</code>                           | The user's tenant ID.                                                                                                                                            |
 
-| Method               | Signature                                                                                             | Description                                                                                   |
-| -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| **delete**           | () =&gt; Promise&lt;void&gt;                                                                          | Deletes and signs out the user.                                                               |
-| **getIdToken**       | (forceRefresh?: boolean \| undefined) =&gt; Promise&lt;string&gt;                                     | Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.               |
-| **getIdTokenResult** | (forceRefresh?: boolean \| undefined) =&gt; Promise&lt;<a href="#idtokenresult">IdTokenResult</a>&gt; | Returns a deserialized JSON Web Token (JWT) used to identitfy the user to a Firebase service. |
-| **reload**           | () =&gt; Promise&lt;void&gt;                                                                          | Refreshes the user, if signed in.                                                             |
-| **toJSON**           | () =&gt; object                                                                                       | Returns a JSON-serializable representation of this object.                                    |
+| Method               | Signature                                                                                             | Description                                                                                  |
+| -------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **delete**           | () =&gt; Promise&lt;void&gt;                                                                          | Deletes and signs out the user.                                                              |
+| **getIdToken**       | (forceRefresh?: boolean \| undefined) =&gt; Promise&lt;string&gt;                                     | Returns a JSON Web Token (JWT) used to identify the user to a Firebase service.              |
+| **getIdTokenResult** | (forceRefresh?: boolean \| undefined) =&gt; Promise&lt;<a href="#idtokenresult">IdTokenResult</a>&gt; | Returns a deserialized JSON Web Token (JWT) used to identify the user to a Firebase service. |
+| **reload**           | () =&gt; Promise&lt;void&gt;                                                                          | Refreshes the user, if signed in.                                                            |
+| **toJSON**           | () =&gt; object                                                                                       | Returns a JSON-serializable representation of this object.                                   |
 
 
 #### IdTokenResult

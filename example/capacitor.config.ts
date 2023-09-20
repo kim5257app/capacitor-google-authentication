@@ -1,10 +1,8 @@
-import { CapacitorConfig } from '@capacitor/cli';
-
-const config: CapacitorConfig = {
+const config = {
   appId: 'com.kim5257.capacitor.auth.google',
   appName: 'example',
   webDir: 'dist',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
 };
 
 export default config;

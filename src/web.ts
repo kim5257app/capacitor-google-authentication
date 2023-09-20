@@ -16,6 +16,8 @@ import {
 import type { ConfirmationResult, Auth, User } from 'firebase/auth';
 
 import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';
+import { Error } from './error';
+import { FirebaseError } from '@firebase/util';
 
 export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenticationPlugin {
   private firebaseAuth: Auth | null = null;
@@ -51,11 +53,10 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       console.log('verifyPhoneNumber:', this.firebaseAuth);
 
       if (this.firebaseAuth == null) {
-        throw {
-          result: 'error',
-          code: 'ERROR_NOT_INITIALIZED',
-          message: 'Not initialized',
-        }
+        Error.throwError(
+          'ERROR_NOT_INITIALIZED',
+          'Not initialized',
+        );
       }
 
       if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
@@ -78,13 +79,17 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
       return Promise.resolve({result: 'success'});
     } catch (error) {
-      this.notifyListeners('google.auth.phone.verify.failed', { message: error.message });
+      let message = 'Unknown error';
 
-      throw {
-        ...error,
-        result: 'error',
-        message: error.message,
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (error instanceof FirebaseError) {
+        message = error.message;
       }
+
+      this.notifyListeners('google.auth.phone.verify.failed', { message });
+
+      throw error;
     }
   }
 
