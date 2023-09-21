@@ -407,27 +407,34 @@ class GoogleAuthenticationPlugin : Plugin() {
     fun getCurrentUser(call: PluginCall) {
         val curUser = FirebaseAuth.getInstance().currentUser
 
-        val accessToken = FirebaseAuth.getInstance().getAccessToken(false)
+        if (curUser != null) {
+            curUser.getIdToken(false).addOnCompleteListener { compResult ->
+                val user = if (compResult.isSuccessful) {
+                    JSObject().apply {
+                        this.put("email", curUser.email)
+                        this.put("displayName", curUser.displayName)
+                        this.put("phoneNumber", curUser.phoneNumber)
+                        this.put("photoUrl", curUser.photoUrl)
+                        this.put("isEmailVerified", curUser.isEmailVerified)
+                        this.put("providerId", curUser.providerId)
+                        this.put("uid", curUser.uid)
+                        this.put("accessToken", compResult.result.token)
+                    }
+                } else {
+                    null
+                }
 
-        val user = if (curUser != null) {
-            JSObject().apply {
-                this.put("email", curUser.email)
-                this.put("displayName", curUser.displayName)
-                this.put("phoneNumber", curUser.phoneNumber)
-                this.put("photoUrl", curUser.photoUrl)
-                this.put("isEmailVerified", curUser.isEmailVerified)
-                this.put("providerId", curUser.providerId)
-                this.put("uid", curUser.uid)
-                this.put("accessToken", accessToken)
+                call.resolve(JSObject().apply {
+                    this.put("result", "success")
+                    this.put("user", user)
+                })
             }
         } else {
-            null
+            call.resolve(JSObject().apply {
+                this.put("result", "success")
+                this.put("user", null)
+            })
         }
-
-        call.resolve(JSObject().apply {
-            this.put("result", "success")
-            this.put("user", user)
-        })
     }
 
     @PluginMethod
