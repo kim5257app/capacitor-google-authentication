@@ -14,11 +14,14 @@ import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.FirebaseApiNotAvailableException
 import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.userProfileChangeRequest
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
+import java.lang.IllegalStateException
 import java.util.concurrent.TimeUnit
 
 @CapacitorPlugin(name = "GoogleAuthentication")
@@ -151,9 +154,15 @@ class GoogleAuthenticationPlugin : Plugin() {
                     }
 
                     override fun onVerificationFailed(exception: FirebaseException) {
-                        Log.e(TAG, "onVerificationFailed: ${exception.message}")
+                        val code = when (exception) {
+                            is FirebaseAuthException -> exception.errorCode
+                            is FirebaseTooManyRequestsException -> "ERROR_QUOTA_EXCEEDED"
+                            is FirebaseApiNotAvailableException -> "ERROR_API_NOT_AVAILABLE"
+                            else -> "ERROR_UNKNOWN"
+                        }
 
                         notifyListeners("google.auth.phone.verify.failed", JSObject().apply {
+                            this.put("code", code)
                             this.put("message", exception.message)
                         })
                     }
@@ -181,7 +190,10 @@ class GoogleAuthenticationPlugin : Plugin() {
     fun confirmPhoneNumber(call: PluginCall) {
         try {
             if (verificationId.isNullOrBlank()) {
-                throw java.lang.IllegalArgumentException("Invalid verification ID")
+                throw FirebaseAuthException(
+                    "ERROR_INVALID_VERIFICATION_ID",
+                    "Invalid verification ID"
+                )
             }
 
             val code = call.getString("code")?:""
@@ -196,10 +208,18 @@ class GoogleAuthenticationPlugin : Plugin() {
                 this.put("result", "success")
             })
         } catch (exception: Exception) {
+            val code = when (exception) {
+                is FirebaseAuthException -> exception.errorCode
+                is IllegalArgumentException -> "ERROR_INVALID_VERIFICATION_CODE"
+                else -> "ERROR_UNKNOWN"
+            }
+
             call.reject(
                 exception.message,
+                code,
                 JSObject().apply {
                     this.put("result", "error")
+                    this.put("code", code)
                     this.put("message", exception.message)
                 }
             )
