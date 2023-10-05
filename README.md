@@ -290,9 +290,10 @@ addListener(eventName: 'google.auth.state.update', listenerFunc: (resp: { idToke
 
 #### GoogleAuthenticationOptions
 
-| Prop                 | Type                |
-| -------------------- | ------------------- |
-| **`googleClientId`** | <code>string</code> |
+| Prop                 | Type                                          |
+| -------------------- | --------------------------------------------- |
+| **`googleClientId`** | <code>string</code>                           |
+| **`persistence`**    | <code>'SESSION' \| 'LOCAL' \| 'MEMORY'</code> |
 
 
 #### User

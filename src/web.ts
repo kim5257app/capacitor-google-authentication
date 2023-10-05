@@ -13,6 +13,9 @@ import {
   setPersistence,
   RecaptchaVerifier,
   GoogleAuthProvider,
+  browserLocalPersistence,
+  browserSessionPersistence,
+  inMemoryPersistence,
 } from 'firebase/auth';
 import type { ConfirmationResult, Auth, User } from 'firebase/auth';
 
@@ -36,6 +39,26 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
   async initialize(config: GoogleAuthenticationOptions): Promise<{ result: 'success' | 'error'}> {
     this.firebaseAuth = getAuth(initializeApp(config));
 
+    if (config.persistence != null) {
+      let persistence = browserLocalPersistence;
+
+      switch (config.persistence) {
+        case 'LOCAL':
+          persistence = browserLocalPersistence;
+          break;
+        case 'SESSION':
+          persistence = browserSessionPersistence;
+          break;
+        case 'MEMORY':
+          persistence = inMemoryPersistence;
+          break;
+        default:
+          break;
+      }
+
+      await setPersistence(this.firebaseAuth, persistence);
+    }
+
     console.log('initialize:', this.firebaseAuth);
 
     onAuthStateChanged(this.firebaseAuth, async (user) => {
@@ -45,10 +68,6 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         idToken: (idToken != null) ? idToken : '',
       });
     });
-
-    if (config.persistence != null) {
-      await setPersistence(this.firebaseAuth, config.persistence);
-    }
 
     return Promise.resolve({ result: 'success' });
   }

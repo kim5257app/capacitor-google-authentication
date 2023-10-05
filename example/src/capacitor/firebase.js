@@ -8,6 +8,7 @@ let checkedAuth = false;
 GoogleAuthentication.initialize({
   ...firebaseConfig,
   googleClientId: '960104226527-lciq621c5dqi1gfussnc6bor7srpv76m.apps.googleusercontent.com',
+  persistence: 'SESSION',
 }).then(() => {});
 
 console.log('GoogleAuthentication:', GoogleAuthentication);
