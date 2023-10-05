@@ -10,6 +10,7 @@ import {
   signInWithCustomToken,
   updateProfile as updateFirebaseProfile,
   updateEmail as updateFirebaseEmail,
+  setPersistence,
   RecaptchaVerifier,
   GoogleAuthProvider,
 } from 'firebase/auth';
@@ -44,6 +45,10 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         idToken: (idToken != null) ? idToken : '',
       });
     });
+
+    if (config.persistence != null) {
+      await setPersistence(this.firebaseAuth, config.persistence);
+    }
 
     return Promise.resolve({ result: 'success' });
   }

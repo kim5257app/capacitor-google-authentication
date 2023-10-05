@@ -1,9 +1,10 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 import type { FirebaseOptions } from 'firebase/app';
-import type { User } from 'firebase/auth';
+import type { User, Persistence } from 'firebase/auth';
 
 export interface GoogleAuthenticationOptions extends FirebaseOptions {
   googleClientId: string;
+  persistence?: Persistence;
 }
 
 export interface GoogleAuthenticationPlugin {
