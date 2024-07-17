@@ -16,8 +16,11 @@ import {
   browserLocalPersistence,
   browserSessionPersistence,
   inMemoryPersistence,
+  linkWithPhoneNumber,
+  ConfirmationResult,
+  Auth,
+  User,
 } from 'firebase/auth';
-import type { ConfirmationResult, Auth, User } from 'firebase/auth';
 
 import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';
 import { Error } from './error';
@@ -86,12 +89,12 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
         console.log('Create Recaptcha');
         this.recaptchaElement = elem;
-        this.recaptchaVerifier = new RecaptchaVerifier(elem, {
+        this.recaptchaVerifier = new RecaptchaVerifier(this.firebaseAuth, elem, {
           size: 'invisible',
           callback() {
             elem.style.display = 'none !important';
           },
-        }, this.firebaseAuth)
+        })
       }
 
       this.confirmationResult = await signInWithPhoneNumber(this.firebaseAuth, phone, this.recaptchaVerifier);
@@ -133,7 +136,10 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       idToken,
     })
 
-    return Promise.resolve({ result: 'success' });
+    return Promise.resolve({
+      result: 'success',
+      userCredential,
+    });
   }
 
   async createUserWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{ result: "success" | "error"; idToken: string }> {
@@ -281,6 +287,53 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     await this.firebaseAuth.signOut();
 
     return Promise.resolve({ result: 'success' });
+  }
+
+  async linkWithPhone({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
+    try {
+      console.log('linkWithPhone');
+
+      if (this.firebaseAuth == null) {
+        Error.throwError(
+          'ERROR_NOT_INITIALIZED',
+          'Not initialized',
+        );
+      }
+
+      if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
+        console.log('Create Recaptcha');
+        this.recaptchaElement = elem;
+        this.recaptchaVerifier = new RecaptchaVerifier(this.firebaseAuth, elem, {
+          size: 'invisible',
+          callback() {
+            elem.style.display = 'none !important';
+          },
+        })
+      }
+
+      const preUserResp = await this.getCurrentUser();
+
+      this.confirmationResult = await linkWithPhoneNumber(preUserResp.user!, phone, this.recaptchaVerifier);
+
+      this.notifyListeners('google.auth.phone.code.sent', {
+        verificationId: null,
+        resendingToken: null,
+      });
+
+      return Promise.resolve({ result: 'success' });
+    } catch (error) {
+      let message = 'Unknown error';
+
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (error instanceof FirebaseError) {
+        message = error.message;
+      }
+
+      this.notifyListeners('google.auth.phone.verify.failed', { message });
+
+      throw error;
+    }
   }
 
   async echo(options: { value: string }): Promise<{ value: string }> {

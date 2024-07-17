@@ -1,6 +1,6 @@
 import type { PluginListenerHandle } from '@capacitor/core';
 import type { FirebaseOptions } from 'firebase/app';
-import type { User } from 'firebase/auth';
+import { User } from 'firebase/auth';
 
 export interface GoogleAuthenticationOptions extends FirebaseOptions {
   googleClientId: string;
@@ -36,12 +36,14 @@ export interface GoogleAuthenticationPlugin {
 
   signOut(): Promise<{ result: 'success' | 'error' }>;
 
+  linkWithPhone({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }>;
+
   echo(options: { value: string }): Promise<{ value: string }>;
 
   addListener(
     eventName: 'google.auth.phone.verify.completed',
     listenerFunc: (resp: { idToken: string }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   addListener(
     eventName: 'google.auth.phone.code.sent',
@@ -49,15 +51,15 @@ export interface GoogleAuthenticationPlugin {
       verificationId: string | null,
       resendingToken: string | null,
     }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   addListener(
     eventName: 'google.auth.phone.verify.failed',
     listenerFunc: (resp: { message: string }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 
   addListener(
     eventName: 'google.auth.state.update',
     listenerFunc: (resp: { idToken: string }) => void,
-  ): Promise<PluginListenerHandle> & PluginListenerHandle;
+  ): Promise<PluginListenerHandle>;
 }

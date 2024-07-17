@@ -25,11 +25,12 @@ npx cap sync
 * [`updateProfile(...)`](#updateprofile)
 * [`updateEmail(...)`](#updateemail)
 * [`signOut()`](#signout)
+* [`linkWithPhone(...)`](#linkwithphone)
 * [`echo(...)`](#echo)
-* [`addListener('google.auth.phone.verify.completed', ...)`](#addlistenergoogleauthphoneverifycompleted)
-* [`addListener('google.auth.phone.code.sent', ...)`](#addlistenergoogleauthphonecodesent)
-* [`addListener('google.auth.phone.verify.failed', ...)`](#addlistenergoogleauthphoneverifyfailed)
-* [`addListener('google.auth.state.update', ...)`](#addlistenergoogleauthstateupdate)
+* [`addListener('google.auth.phone.verify.completed', ...)`](#addlistenergoogleauthphoneverifycompleted-)
+* [`addListener('google.auth.phone.code.sent', ...)`](#addlistenergoogleauthphonecodesent-)
+* [`addListener('google.auth.phone.verify.failed', ...)`](#addlistenergoogleauthphoneverifyfailed-)
+* [`addListener('google.auth.state.update', ...)`](#addlistenergoogleauthstateupdate-)
 * [Interfaces](#interfaces)
 * [Type Aliases](#type-aliases)
 
@@ -206,6 +207,21 @@ signOut() => Promise<{ result: 'success' | 'error'; }>
 --------------------
 
 
+### linkWithPhone(...)
+
+```typescript
+linkWithPhone({ phone, elem }: { phone: string; elem: HTMLElement; }) => Promise<{ result: "success" | "error"; }>
+```
+
+| Param     | Type                                       |
+| --------- | ------------------------------------------ |
+| **`__0`** | <code>{ phone: string; elem: any; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
+
+--------------------
+
+
 ### echo(...)
 
 ```typescript
@@ -224,7 +240,7 @@ echo(options: { value: string; }) => Promise<{ value: string; }>
 ### addListener('google.auth.phone.verify.completed', ...)
 
 ```typescript
-addListener(eventName: 'google.auth.phone.verify.completed', listenerFunc: (resp: { idToken: string; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'google.auth.phone.verify.completed', listenerFunc: (resp: { idToken: string; }) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                 |
@@ -232,7 +248,7 @@ addListener(eventName: 'google.auth.phone.verify.completed', listenerFunc: (resp
 | **`eventName`**    | <code>'google.auth.phone.verify.completed'</code>    |
 | **`listenerFunc`** | <code>(resp: { idToken: string; }) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 
@@ -240,7 +256,7 @@ addListener(eventName: 'google.auth.phone.verify.completed', listenerFunc: (resp
 ### addListener('google.auth.phone.code.sent', ...)
 
 ```typescript
-addListener(eventName: 'google.auth.phone.code.sent', listenerFunc: (resp: { verificationId: string | null; resendingToken: string | null; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'google.auth.phone.code.sent', listenerFunc: (resp: { verificationId: string | null; resendingToken: string | null; }) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                                                                |
@@ -248,7 +264,7 @@ addListener(eventName: 'google.auth.phone.code.sent', listenerFunc: (resp: { ver
 | **`eventName`**    | <code>'google.auth.phone.code.sent'</code>                                                          |
 | **`listenerFunc`** | <code>(resp: { verificationId: string \| null; resendingToken: string \| null; }) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 
@@ -256,7 +272,7 @@ addListener(eventName: 'google.auth.phone.code.sent', listenerFunc: (resp: { ver
 ### addListener('google.auth.phone.verify.failed', ...)
 
 ```typescript
-addListener(eventName: 'google.auth.phone.verify.failed', listenerFunc: (resp: { message: string; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'google.auth.phone.verify.failed', listenerFunc: (resp: { message: string; }) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                 |
@@ -264,7 +280,7 @@ addListener(eventName: 'google.auth.phone.verify.failed', listenerFunc: (resp: {
 | **`eventName`**    | <code>'google.auth.phone.verify.failed'</code>       |
 | **`listenerFunc`** | <code>(resp: { message: string; }) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 
@@ -272,7 +288,7 @@ addListener(eventName: 'google.auth.phone.verify.failed', listenerFunc: (resp: {
 ### addListener('google.auth.state.update', ...)
 
 ```typescript
-addListener(eventName: 'google.auth.state.update', listenerFunc: (resp: { idToken: string; }) => void) => Promise<PluginListenerHandle> & PluginListenerHandle
+addListener(eventName: 'google.auth.state.update', listenerFunc: (resp: { idToken: string; }) => void) => Promise<PluginListenerHandle>
 ```
 
 | Param              | Type                                                 |
@@ -280,7 +296,7 @@ addListener(eventName: 'google.auth.state.update', listenerFunc: (resp: { idToke
 | **`eventName`**    | <code>'google.auth.state.update'</code>              |
 | **`listenerFunc`** | <code>(resp: { idToken: string; }) =&gt; void</code> |
 
-**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt; & <a href="#pluginlistenerhandle">PluginListenerHandle</a></code>
+**Returns:** <code>Promise&lt;<a href="#pluginlistenerhandle">PluginListenerHandle</a>&gt;</code>
 
 --------------------
 

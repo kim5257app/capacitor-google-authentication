@@ -1,6 +1,6 @@
 {
   "name": "@kim5257/capacitor-google-authentication",
-  "version": "0.0.16",
+  "version": "0.0.21",
   "description": "Google Authentication Capacitor Plugin",
   "main": "dist/index.cjs.js",
   "module": "dist/esm/index.js",
@@ -45,13 +45,13 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "firebase": "^9.17.1"
+    "firebase": "^10.12.3"
   },
   "devDependencies": {
-    "@capacitor/android": "^5.4.0",
-    "@capacitor/core": "^5.4.0",
-    "@capacitor/docgen": "^0.2.1",
-    "@capacitor/ios": "^5.4.0",
+    "@capacitor/android": "^6.1.0",
+    "@capacitor/core": "^6.1.0",
+    "@capacitor/docgen": "^0.2.2",
+    "@capacitor/ios": "^6.1.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^4.0.0",
     "@ionic/swiftlint-config": "^1.1.2",
@@ -67,7 +67,7 @@
     "typescript": "~5.2.2"
   },
   "peerDependencies": {
-    "@capacitor/core": "^5.4.0"
+    "@capacitor/core": "^6.1.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
@@ -81,5 +81,6 @@
     "android": {
       "src": "android"
     }
-  }
+  },
+  "packageManager": "pnpm@9.5.0+sha512.140036830124618d624a2187b50d04289d5a087f326c9edfc0ccd733d76c4f52c3a313d4fc148794a2a9d81553016004e6742e8cf850670268a7387fc220c903"
 }
