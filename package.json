@@ -45,6 +45,7 @@
     "prepublishOnly": "npm run build"
   },
   "dependencies": {
+    "@firebase/util": "^1.9.7",
     "firebase": "^10.12.3"
   },
   "devDependencies": {
