@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@capacitor/android':
-        specifier: ^5.2.2
-        version: 5.7.7(@capacitor/core@4.8.2)
+        specifier: ^6.1.1
+        version: 6.1.1(@capacitor/core@6.1.1)
       '@capacitor/core':
-        specifier: ^4.7.0
-        version: 4.8.2
+        specifier: ^6.1.1
+        version: 6.1.1
       '@capacitor/ios':
-        specifier: ^5.2.2
-        version: 5.7.7(@capacitor/core@4.8.2)
+        specifier: ^6.1.1
+        version: 6.1.1(@capacitor/core@6.1.1)
       '@kim5257/capacitor-google-authentication':
         specifier: ../
         version: link:..
@@ -49,8 +49,8 @@ importers:
         version: 1.6.28
     devDependencies:
       '@capacitor/cli':
-        specifier: ^4.7.0
-        version: 4.8.2
+        specifier: ^6.1.1
+        version: 6.1.1
       '@vitejs/plugin-vue':
         specifier: ^3.0.3
         version: 3.2.0(vite@3.2.10(@types/node@20.14.11)(sass@1.77.8)(terser@5.31.3))(vue@3.4.32)
@@ -92,23 +92,23 @@ packages:
     resolution: {integrity: sha512-xm8XrMKz0IlUdocVbYJe0Z9xEgidU7msskG8BbhnTPK/HZ2z/7FP7ykqPgrUH+C+r414mNfNWam1f2vqOjqjYQ==}
     engines: {node: '>=6.9.0'}
 
-  '@capacitor/android@5.7.7':
-    resolution: {integrity: sha512-gkc8p0jjbRHu5oxKvWQV1d6zRHNeK7/GQUHOL9J6yQqnnttLDf1tSZ4BVjicMdyKlxUailuBcboWvng+KYilvQ==}
+  '@capacitor/android@6.1.1':
+    resolution: {integrity: sha512-rhO/nH6NJizGV5KizoIoGxCmkos3HnyUzI9TNv8IVy/C8h6lPM5Gt9cxGclb6k0OBTtgv6iJVo654+m4kzv0Qg==}
     peerDependencies:
-      '@capacitor/core': ^5.7.0
+      '@capacitor/core': ^6.1.0
 
-  '@capacitor/cli@4.8.2':
-    resolution: {integrity: sha512-jOpuajj8Qp5XgWEEC5vxEJcs9HkwSceW8fpvFIFssA/JuS9HeKCurGgpsAWiEHSfpqQevhxISg0l0MEwTpr/JA==}
-    engines: {node: '>=12.4.0'}
+  '@capacitor/cli@6.1.1':
+    resolution: {integrity: sha512-rsRqEadfnBSUX90RZj59oXvi30bpSusLMfIcgbOIArOloTgfaaWr9R471F6m3gGWF7BhNoskJpZcCgSUsfywwA==}
+    engines: {node: '>=18.0.0'}
     hasBin: true
 
-  '@capacitor/core@4.8.2':
-    resolution: {integrity: sha512-lrDvHyQu3LWWWXkCkHATY8D3GCBIWyqnmQUiGxlTJfu9BEdmfflq+OZuDKIy4H+KYChaXM1QnymNIuWrDFXgXw==}
+  '@capacitor/core@6.1.1':
+    resolution: {integrity: sha512-b1s4WDMy3Y1/owTG2/XNGCI6G5SDpF2NT1JMAgcShue13fiAuHA+Ans7Wfei6McvR0KdopAE6tMHmDAfL5PM8Q==}
 
-  '@capacitor/ios@5.7.7':
-    resolution: {integrity: sha512-bgvSJGia5C5Klfd7t/qlqlRAWzGGAwlIlzkOJYsxpJiYuz6OXVgeesuXRxMNOaUZQ9fmL7OWukmhcv03t9Up+w==}
+  '@capacitor/ios@6.1.1':
+    resolution: {integrity: sha512-he6+Fhj6x1dSnOzM98xaPvioOU8MNO+qpodCJwnHE3mIRonTpFutXJK8DP8fnNhjDPk2km9VafLSfOeiZXNv3Q==}
     peerDependencies:
-      '@capacitor/core': ^5.7.0
+      '@capacitor/core': ^6.1.0
 
   '@esbuild/android-arm@0.15.18':
     resolution: {integrity: sha512-5GT+kcs2WVGjVs7+boataCkO5Fg0y4kCjzkB5bAip7H4jfnOS3dA6KPiww9W1OEKTKeAcUVhdZGvgI65OXmUnw==}
@@ -365,9 +365,17 @@ packages:
     resolution: {integrity: sha512-XnYNSwfewUqxq+yjER1hxTKggftpNjFLJH0s37jcrNDwbzmbpFTQTVAp4ikNK4rd9DOebX/jbeZb8jfD86IYxw==}
     engines: {node: '>=10.3.0'}
 
+  '@ionic/utils-object@2.1.6':
+    resolution: {integrity: sha512-vCl7sl6JjBHFw99CuAqHljYJpcE88YaH2ZW4ELiC/Zwxl5tiwn4kbdP/gxi2OT3MQb1vOtgAmSNRtusvgxI8ww==}
+    engines: {node: '>=16.0.0'}
+
   '@ionic/utils-process@2.1.10':
     resolution: {integrity: sha512-mZ7JEowcuGQK+SKsJXi0liYTcXd2bNMR3nE0CyTROpMECUpJeAvvaBaPGZf5ERQUPeWBVuwqAqjUmIdxhz5bxw==}
     engines: {node: '>=10.3.0'}
+
+  '@ionic/utils-process@2.1.12':
+    resolution: {integrity: sha512-Jqkgyq7zBs/v/J3YvKtQQiIcxfJyplPgECMWgdO0E1fKrrH8EF0QGHNJ9mJCn6PYe2UtHNS8JJf5G21e09DfYg==}
+    engines: {node: '>=16.0.0'}
 
   '@ionic/utils-stream@3.1.5':
     resolution: {integrity: sha512-hkm46uHvEC05X/8PHgdJi4l4zv9VQDELZTM+Kz69odtO9zZYfnt8DkfXHJqJ+PxmtiE5mk/ehJWLnn/XAczTUw==}
@@ -653,6 +661,9 @@ packages:
 
   brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
+
+  brace-expansion@2.0.1:
+    resolution: {integrity: sha512-XnAIvQ8eM+kC6aULx6wuQiwVsnzsi9d3WxzV3FpWTGA19F621kwdbsAcFKXgKUHZWsy+mY6iL1sHTxWEFCytDA==}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -1071,6 +1082,10 @@ packages:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==}
     deprecated: Glob versions prior to v9 are no longer supported
 
+  glob@9.3.5:
+    resolution: {integrity: sha512-e1LleDykUz2Iu+MTYdkSsuWX8lvAjAcs0Xef0lNIu0S2wOAzuTxCJtcd9S3cijlwYF18EsU3rzb8jPVobxDh9Q==}
+    engines: {node: '>=16 || 14 >=14.17'}
+
   globals@13.24.0:
     resolution: {integrity: sha512-AhO5QUcj8llrbG09iWhPU2B204J1xnPeL8kQmVorSsy+Sjj1sk8gIyh6cUocGmH4L0UuhAJy+hJMRA4mgA4mFQ==}
     engines: {node: '>=8'}
@@ -1120,9 +1135,9 @@ packages:
   inherits@2.0.4:
     resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
-  ini@3.0.1:
-    resolution: {integrity: sha512-it4HyVAUTKBc6m8e1iXWvXSTdndF7HbdN713+kvLrymxTaU4AUBWrJ4vEooP+V7fexnVD3LKcBshjGGPefSMUQ==}
-    engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
+  ini@4.1.3:
+    resolution: {integrity: sha512-X7rqawQBvfdjS10YU1y1YVreA3SsLrW9dX2CewP2EbBJM4ypVNLDkO5y04gejPwKIY9lR+7r9gn3rFPt/kmWFg==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
   is-binary-path@2.1.0:
     resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
@@ -1229,6 +1244,9 @@ packages:
   long@5.2.3:
     resolution: {integrity: sha512-lcHwpNoggQTObv5apGNCTdJrO69eHOZMi4BNC+rTLER8iHAqGrUVeLh/irVIM7zTw2bOXA8T6uNPeujwOLg/2Q==}
 
+  lru-cache@10.4.3:
+    resolution: {integrity: sha512-JNAzZcXrCt42VGLuYz0zfAzDfAvJWW6AfYlDBQyDV5DClI2m5sAmK+OIO7s59XfsRsWHp02jAJrRadPRGTt6SQ==}
+
   magic-string@0.30.10:
     resolution: {integrity: sha512-iIRwTIf0QKV3UAnYK4PU8uiEc4SRh5jX0mwpIwETPpHdhVM4f53RSwS/vXvN1JhGX+Cs7B8qIq3d6AH49O5fAQ==}
 
@@ -1250,8 +1268,16 @@ packages:
   minimatch@3.1.2:
     resolution: {integrity: sha512-J7p63hRiAjw1NDEww1W7i37+ByIrOWO5XQQAzZ3VOcL0PNybwpfmV/N05zFAzwQ9USyEcX6t3UO+K5aqBQOIHw==}
 
+  minimatch@8.0.4:
+    resolution: {integrity: sha512-W0Wvr9HyFXZRGIDgCicunpQ299OKXs9RgZfaukz4qAW/pJhcpUfupc9c+OObPOFueNy8VSrZgEmDtk6Kh4WzDA==}
+    engines: {node: '>=16 || 14 >=14.17'}
+
   minipass@3.3.6:
     resolution: {integrity: sha512-DxiNidxSEK+tHG6zOIklvNOwm3hvCrbUrdtzY74U6HKTJxvIDfOUL5W5P2Ghd3DTkhhKPYGqeNUIh5qcM4YBfw==}
+    engines: {node: '>=8'}
+
+  minipass@4.2.8:
+    resolution: {integrity: sha512-fNzuVyifolSLFL4NzpF+wEF4qrgqaaKX0haXPQEdQ7NKAN+WecoKMHV09YcuL/DHxrUsYQOK3MiuDf7Ip2OXfQ==}
     engines: {node: '>=8'}
 
   minipass@5.0.0:
@@ -1275,9 +1301,9 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  native-run@1.7.4:
-    resolution: {integrity: sha512-yDEwTp66vmXpqFiSQzz4sVQgyq5U58gGRovglY4GHh12ITyWa6mh6Lbpm2gViVOVD1JYFtYnwcgr7GTFBinXNA==}
-    engines: {node: '>=12.13.0'}
+  native-run@2.0.1:
+    resolution: {integrity: sha512-XfG1FBZLM50J10xH9361whJRC9SHZ0Bub4iNRhhI61C8Jv0e1ud19muex6sNKB51ibQNUJNuYn25MuYET/rE6w==}
+    engines: {node: '>=16.0.0'}
     hasBin: true
 
   natural-compare@1.4.0:
@@ -1354,6 +1380,10 @@ packages:
 
   path-parse@1.0.7:
     resolution: {integrity: sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==}
+
+  path-scurry@1.11.1:
+    resolution: {integrity: sha512-Xa4Nw17FS9ApQFJ9umLiJS4orGjm7ZzwUrwamcGQuHSzDyth9boKDaycYdDcZDuqYATXw4HFXgaqWTctW/v1HA==}
+    engines: {node: '>=16 || 14 >=14.18'}
 
   pend@1.2.0:
     resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
@@ -1449,6 +1479,11 @@ packages:
   rimraf@3.0.2:
     resolution: {integrity: sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==}
     deprecated: Rimraf versions prior to v4 are no longer supported
+    hasBin: true
+
+  rimraf@4.4.1:
+    resolution: {integrity: sha512-Gk8NlF062+T9CqNGn6h4tls3k6T1+/nXdOcSZVikNVtlRdYpA7wRJJMoXmuvOnLW844rPjdQ7JgXCYM6PPC/og==}
+    engines: {node: '>=14'}
     hasBin: true
 
   roboto-fontface@0.10.0:
@@ -1854,25 +1889,26 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@capacitor/android@5.7.7(@capacitor/core@4.8.2)':
+  '@capacitor/android@6.1.1(@capacitor/core@6.1.1)':
     dependencies:
-      '@capacitor/core': 4.8.2
+      '@capacitor/core': 6.1.1
 
-  '@capacitor/cli@4.8.2':
+  '@capacitor/cli@6.1.1':
     dependencies:
       '@ionic/cli-framework-output': 2.2.5
-      '@ionic/utils-fs': 3.1.6
+      '@ionic/utils-fs': 3.1.7
+      '@ionic/utils-process': 2.1.12
       '@ionic/utils-subprocess': 2.1.11
-      '@ionic/utils-terminal': 2.3.3
+      '@ionic/utils-terminal': 2.3.5
       commander: 9.5.0
       debug: 4.3.5
       env-paths: 2.2.1
       kleur: 4.1.5
-      native-run: 1.7.4
+      native-run: 2.0.1
       open: 8.4.2
       plist: 3.1.0
       prompts: 2.4.2
-      rimraf: 3.0.2
+      rimraf: 4.4.1
       semver: 7.6.3
       tar: 6.2.1
       tslib: 2.6.3
@@ -1880,13 +1916,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@capacitor/core@4.8.2':
+  '@capacitor/core@6.1.1':
     dependencies:
       tslib: 2.6.3
 
-  '@capacitor/ios@5.7.7(@capacitor/core@4.8.2)':
+  '@capacitor/ios@6.1.1(@capacitor/core@6.1.1)':
     dependencies:
-      '@capacitor/core': 4.8.2
+      '@capacitor/core': 6.1.1
 
   '@esbuild/android-arm@0.15.18':
     optional: true
@@ -2302,10 +2338,28 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  '@ionic/utils-object@2.1.6':
+    dependencies:
+      debug: 4.3.5
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - supports-color
+
   '@ionic/utils-process@2.1.10':
     dependencies:
       '@ionic/utils-object': 2.1.5
       '@ionic/utils-terminal': 2.3.3
+      debug: 4.3.5
+      signal-exit: 3.0.7
+      tree-kill: 1.2.2
+      tslib: 2.6.3
+    transitivePeerDependencies:
+      - supports-color
+
+  '@ionic/utils-process@2.1.12':
+    dependencies:
+      '@ionic/utils-object': 2.1.6
+      '@ionic/utils-terminal': 2.3.5
       debug: 4.3.5
       signal-exit: 3.0.7
       tree-kill: 1.2.2
@@ -2664,6 +2718,10 @@ snapshots:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
+
+  brace-expansion@2.0.1:
+    dependencies:
+      balanced-match: 1.0.2
 
   braces@3.0.3:
     dependencies:
@@ -3088,6 +3146,13 @@ snapshots:
       once: 1.4.0
       path-is-absolute: 1.0.1
 
+  glob@9.3.5:
+    dependencies:
+      fs.realpath: 1.0.0
+      minimatch: 8.0.4
+      minipass: 4.2.8
+      path-scurry: 1.11.1
+
   globals@13.24.0:
     dependencies:
       type-fest: 0.20.2
@@ -3126,7 +3191,7 @@ snapshots:
 
   inherits@2.0.4: {}
 
-  ini@3.0.1: {}
+  ini@4.1.3: {}
 
   is-binary-path@2.1.0:
     dependencies:
@@ -3213,6 +3278,8 @@ snapshots:
 
   long@5.2.3: {}
 
+  lru-cache@10.4.3: {}
+
   magic-string@0.30.10:
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.0
@@ -3233,9 +3300,15 @@ snapshots:
     dependencies:
       brace-expansion: 1.1.11
 
+  minimatch@8.0.4:
+    dependencies:
+      brace-expansion: 2.0.1
+
   minipass@3.3.6:
     dependencies:
       yallist: 4.0.0
+
+  minipass@4.2.8: {}
 
   minipass@5.0.0: {}
 
@@ -3250,14 +3323,14 @@ snapshots:
 
   nanoid@3.3.7: {}
 
-  native-run@1.7.4:
+  native-run@2.0.1:
     dependencies:
       '@ionic/utils-fs': 3.1.7
       '@ionic/utils-terminal': 2.3.5
       bplist-parser: 0.3.2
       debug: 4.3.5
       elementtree: 0.1.7
-      ini: 3.0.1
+      ini: 4.1.3
       plist: 3.1.0
       split2: 4.2.0
       through2: 4.0.2
@@ -3330,6 +3403,11 @@ snapshots:
   path-key@3.1.1: {}
 
   path-parse@1.0.7: {}
+
+  path-scurry@1.11.1:
+    dependencies:
+      lru-cache: 10.4.3
+      minipass: 5.0.0
 
   pend@1.2.0: {}
 
@@ -3437,6 +3515,10 @@ snapshots:
   rimraf@3.0.2:
     dependencies:
       glob: 7.2.3
+
+  rimraf@4.4.1:
+    dependencies:
+      glob: 9.3.5
 
   roboto-fontface@0.10.0: {}
 
