@@ -524,6 +524,81 @@ class GoogleAuthenticationPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun linkWithPhone(call: PluginCall) {
+        try {
+            val phone: String = call.getString("phone")?:""
+            val pThis = this
+
+            if (phone.isBlank()) {
+                throw java.lang.IllegalArgumentException("Invalid phone number")
+            }
+
+            val options = PhoneAuthOptions.newBuilder()
+                .setPhoneNumber(phone)
+                .setTimeout(120L, TimeUnit.SECONDS)
+                .setActivity(activity)
+                .also { options ->
+                    resendingToken?.let { options.setForceResendingToken(it) }
+                }
+                .setCallbacks(object: PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+                        Log.d(TAG, "onVerificationCompleted")
+
+                        val idToken = getIdToken(credential)
+
+                        FirebaseAuth.getInstance().currentUser?.linkWithCredential(credential)
+
+                        notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                            this.put("idToken", idToken)
+                        })
+                    }
+
+                    override fun onCodeSent(verificationId: String, resendingToken: PhoneAuthProvider.ForceResendingToken) {
+                        Log.d(TAG, "onCodeSent: $verificationId, $resendingToken")
+
+                        pThis.verificationId = verificationId
+                        pThis.resendingToken = resendingToken
+
+                        notifyListeners("google.auth.phone.code.sent", JSObject().apply {
+                            this.put("verificationId", verificationId)
+                            this.put("resendingToken", resendingToken)
+                        })
+                    }
+
+                    override fun onVerificationFailed(exception: FirebaseException) {
+                        val code = when (exception) {
+                            is FirebaseAuthException -> exception.errorCode
+                            is FirebaseTooManyRequestsException -> "ERROR_QUOTA_EXCEEDED"
+                            is FirebaseApiNotAvailableException -> "ERROR_API_NOT_AVAILABLE"
+                            else -> "ERROR_UNKNOWN"
+                        }
+
+                        notifyListeners("google.auth.phone.verify.failed", JSObject().apply {
+                            this.put("code", code)
+                            this.put("message", exception.message)
+                        })
+                    }
+                }).build()
+
+            PhoneAuthProvider.verifyPhoneNumber(options)
+
+            call.resolve(JSObject().apply {
+                this.put("result", "success")
+            })
+        } catch (exception: Exception) {
+            Log.e(TAG, "Unknown Error: ${exception.message}")
+
+            call.reject(
+                exception.message,
+                JSObject().apply {
+                    this.put("result", "error")
+                    this.put("message", exception.message)
+                }
+            )
+        }
+    }
+
+    @PluginMethod
     fun echo(call: PluginCall) {
         val value = call.getString("value")?:""
         val ret = JSObject()
