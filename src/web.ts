@@ -128,9 +128,9 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       }
     }
 
-    const userCredential = await this.confirmationResult.confirm(code);
+    const credential = await this.confirmationResult.confirm(code);
 
-    const idToken = await userCredential.user.getIdToken(false);
+    const idToken = await credential.user.getIdToken(false);
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
@@ -138,7 +138,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     return Promise.resolve({
       result: 'success',
-      userCredential,
+      credential,
     });
   }
 
@@ -250,6 +250,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
   }
 
   async getCurrentUser(): Promise<{ result: 'success' | 'error'; user: User | null | undefined }> {
+
     return {
       result: 'success',
       user: this.firebaseAuth?.currentUser,
@@ -334,6 +335,28 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
       throw error;
     }
+  }
+
+  async confirmLinkPhoneNumber({ code }: { code: string }): Promise<{ result: "success" | "error" }> {
+    if (this.confirmationResult == null) {
+      throw {
+        result: 'error',
+        message: 'Invalid access',
+      }
+    }
+
+    const credential = await this.confirmationResult.confirm(code);
+
+    const idToken = await credential.user.getIdToken(false);
+
+    this.notifyListeners('google.auth.phone.verify.completed', {
+      idToken,
+    })
+
+    return Promise.resolve({
+      result: 'success',
+      credential,
+    });
   }
 
   async echo(options: { value: string }): Promise<{ value: string }> {

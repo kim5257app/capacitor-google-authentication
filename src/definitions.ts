@@ -38,6 +38,8 @@ export interface GoogleAuthenticationPlugin {
 
   linkWithPhone({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }>;
 
+  confirmLinkPhoneNumber(options: { code: string }): Promise<{ result: 'success' | 'error' }>;
+
   echo(options: { value: string }): Promise<{ value: string }>;
 
   addListener(

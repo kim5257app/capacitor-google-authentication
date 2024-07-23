@@ -26,6 +26,7 @@ npx cap sync
 * [`updateEmail(...)`](#updateemail)
 * [`signOut()`](#signout)
 * [`linkWithPhone(...)`](#linkwithphone)
+* [`confirmLinkPhoneNumber(...)`](#confirmlinkphonenumber)
 * [`echo(...)`](#echo)
 * [`addListener('google.auth.phone.verify.completed', ...)`](#addlistenergoogleauthphoneverifycompleted-)
 * [`addListener('google.auth.phone.code.sent', ...)`](#addlistenergoogleauthphonecodesent-)
@@ -216,6 +217,21 @@ linkWithPhone({ phone, elem }: { phone: string; elem: HTMLElement; }) => Promise
 | Param     | Type                                       |
 | --------- | ------------------------------------------ |
 | **`__0`** | <code>{ phone: string; elem: any; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
+
+--------------------
+
+
+### confirmLinkPhoneNumber(...)
+
+```typescript
+confirmLinkPhoneNumber(options: { code: string; }) => Promise<{ result: 'success' | 'error'; }>
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ code: string; }</code> |
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
 
