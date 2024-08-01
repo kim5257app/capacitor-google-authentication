@@ -198,6 +198,7 @@ class GoogleAuthenticationPlugin : Plugin() {
 
             val code = call.getString("code")?:""
             val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+
             val idToken = getIdToken(credential)
 
             notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
@@ -612,6 +613,72 @@ class GoogleAuthenticationPlugin : Plugin() {
             val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
 
             FirebaseAuth.getInstance().currentUser?.linkWithCredential(credential)?.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val idToken = FirebaseAuth.getInstance().currentUser?.getIdToken(true)
+
+                    notifyListeners("google.auth.phone.verify.completed", JSObject().apply {
+                        this.put("idToken", idToken)
+                    })
+
+                    call.resolve(JSObject().apply {
+                        this.put("result", "success")
+                    })
+                } else {
+                    val errorCode = when (task.exception) {
+                        is FirebaseAuthException -> (task.exception as FirebaseAuthException).errorCode
+                        is IllegalArgumentException -> "ERROR_INVALID_VERIFICATION_CODE"
+                        else -> "ERROR_UNKNOWN"
+                    }
+
+                    call.reject(
+                        task.exception?.message?:"ERROR_UNKNOWN",
+                        errorCode,
+                        JSObject().apply {
+                            this.put("result", "error")
+                            this.put("code", errorCode)
+                            this.put("message", task.exception?.message?:"ERROR_UNKNOWN")
+                        }
+                    )
+                }
+            }
+        } catch (exception: Exception) {
+            val code = when (exception) {
+                is FirebaseAuthException -> exception.errorCode
+                is IllegalArgumentException -> "ERROR_INVALID_VERIFICATION_CODE"
+                else -> "ERROR_UNKNOWN"
+            }
+
+            call.reject(
+                exception.message,
+                code,
+                JSObject().apply {
+                    this.put("result", "error")
+                    this.put("code", code)
+                    this.put("message", exception.message)
+                }
+            )
+        }
+    }
+
+    @PluginMethod
+    fun updatePhoneNumber(call: PluginCall) {
+        return this.linkWithPhone(call)
+    }
+
+    @PluginMethod
+    fun confirmUpdatePhoneNumber(call: PluginCall) {
+        try {
+            if (verificationId.isNullOrBlank()) {
+                throw FirebaseAuthException(
+                    "ERROR_INVALID_VERIFICATION_ID",
+                    "Invalid verification ID"
+                )
+            }
+
+            val code = call.getString("code")?:""
+            val credential = PhoneAuthProvider.getCredential(verificationId!!, code)
+
+            FirebaseAuth.getInstance().currentUser?.updatePhoneNumber(credential)?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val idToken = FirebaseAuth.getInstance().currentUser?.getIdToken(true)
 

@@ -40,6 +40,10 @@ export interface GoogleAuthenticationPlugin {
 
   confirmLinkPhoneNumber(options: { code: string }): Promise<{ result: 'success' | 'error' }>;
 
+  updatePhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }>;
+
+  confirmUpdatePhoneNumber(options: { code: string }): Promise<{ result: 'success' | 'error' }>;
+
   echo(options: { value: string }): Promise<{ value: string }>;
 
   addListener(

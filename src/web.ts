@@ -18,6 +18,7 @@ import {
   inMemoryPersistence,
   linkWithPhoneNumber,
   ConfirmationResult,
+  updatePhoneNumber,
   Auth,
   User,
 } from 'firebase/auth';
@@ -25,11 +26,14 @@ import {
 import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';
 import { Error } from './error';
 import { FirebaseError } from '@firebase/util';
+import { PhoneAuthProvider } from 'firebase/auth';
 
 export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenticationPlugin {
   private firebaseAuth: Auth | null = null;
 
   private confirmationResult: ConfirmationResult | null = null;
+
+  private verificationId: string | null = null;
 
   private recaptchaVerifier: RecaptchaVerifier | null = null;
 
@@ -348,6 +352,88 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     const credential = await this.confirmationResult.confirm(code);
 
     const idToken = await credential.user.getIdToken(false);
+
+    this.notifyListeners('google.auth.phone.verify.completed', {
+      idToken,
+    })
+
+    return Promise.resolve({
+      result: 'success',
+      credential,
+    });
+  }
+
+  async updatePhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
+    try {
+      console.log('updatePhone');
+
+      if (this.firebaseAuth == null) {
+        Error.throwError(
+          'ERROR_NOT_INITIALIZED',
+          'Not initialized',
+        );
+      }
+
+      if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
+        console.log('Create Recaptcha');
+        this.recaptchaElement = elem;
+        this.recaptchaVerifier = new RecaptchaVerifier(this.firebaseAuth, elem, {
+          size: 'invisible',
+          callback() {
+            elem.style.display = 'none !important';
+          },
+        })
+      }
+
+      const provider = new PhoneAuthProvider(this.firebaseAuth);
+      this.verificationId = await provider.verifyPhoneNumber(phone, this.recaptchaVerifier);
+
+      this.notifyListeners('google.auth.phone.code.sent', {
+        verificationId: null,
+        resendingToken: null,
+      });
+
+      return Promise.resolve({ result: 'success' });
+    } catch (error) {
+      let message = 'Unknown error';
+
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (error instanceof FirebaseError) {
+        message = error.message;
+      }
+
+      this.notifyListeners('google.auth.phone.verify.failed', { message });
+
+      throw error;
+    }
+  }
+
+  async confirmUpdatePhoneNumber({ code }: { code: string }): Promise<{ result: "success" | "error" }> {
+    if (this.verificationId == null) {
+      throw {
+        result: 'error',
+        message: 'Invalid access',
+      }
+    }
+
+    const credential = PhoneAuthProvider.credential(
+      this.verificationId,
+      code,
+    );
+
+    const preUserResp = await this.getCurrentUser();
+
+    if (preUserResp.result !== 'success') {
+      throw {
+        result: 'error',
+        message: 'Invalid access',
+      }
+    }
+
+    await updatePhoneNumber(preUserResp.user!, credential)
+
+    const idToken = await preUserResp.user!.getIdToken(false)
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
