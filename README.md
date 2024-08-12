@@ -27,6 +27,8 @@ npx cap sync
 * [`signOut()`](#signout)
 * [`linkWithPhone(...)`](#linkwithphone)
 * [`confirmLinkPhoneNumber(...)`](#confirmlinkphonenumber)
+* [`updatePhoneNumber(...)`](#updatephonenumber)
+* [`confirmUpdatePhoneNumber(...)`](#confirmupdatephonenumber)
 * [`echo(...)`](#echo)
 * [`addListener('google.auth.phone.verify.completed', ...)`](#addlistenergoogleauthphoneverifycompleted-)
 * [`addListener('google.auth.phone.code.sent', ...)`](#addlistenergoogleauthphonecodesent-)
@@ -227,6 +229,36 @@ linkWithPhone({ phone, elem }: { phone: string; elem: HTMLElement; }) => Promise
 
 ```typescript
 confirmLinkPhoneNumber(options: { code: string; }) => Promise<{ result: 'success' | 'error'; }>
+```
+
+| Param         | Type                           |
+| ------------- | ------------------------------ |
+| **`options`** | <code>{ code: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
+
+--------------------
+
+
+### updatePhoneNumber(...)
+
+```typescript
+updatePhoneNumber({ phone, elem }: { phone: string; elem: HTMLElement; }) => Promise<{ result: "success" | "error"; }>
+```
+
+| Param     | Type                                       |
+| --------- | ------------------------------------------ |
+| **`__0`** | <code>{ phone: string; elem: any; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; }&gt;</code>
+
+--------------------
+
+
+### confirmUpdatePhoneNumber(...)
+
+```typescript
+confirmUpdatePhoneNumber(options: { code: string; }) => Promise<{ result: 'success' | 'error'; }>
 ```
 
 | Param         | Type                           |

@@ -5,18 +5,21 @@ import router from '@/router';
 let googleAuthStateUpdated = false;
 let checkedAuth = false;
 
-GoogleAuthentication.initialize({
-  ...firebaseConfig,
-  googleClientId: '960104226527-lciq621c5dqi1gfussnc6bor7srpv76m.apps.googleusercontent.com',
-  persistence: 'SESSION',
-}).then(() => {});
-
 console.log('GoogleAuthentication:', GoogleAuthentication);
 
-GoogleAuthentication.addListener('google.auth.state.update', async () => {
-  googleAuthStateUpdated = true;
-  await checkAuth();
-});
+(async () => {
+  await GoogleAuthentication.addListener('google.auth.state.update', async () => {
+    googleAuthStateUpdated = true;
+    await checkAuth();
+  })
+
+  await GoogleAuthentication.initialize({
+    ...firebaseConfig,
+    googleClientId: '960104226527-lciq621c5dqi1gfussnc6bor7srpv76m.apps.googleusercontent.com',
+    persistence: 'SESSION',
+  })
+})();
+
 
 router.beforeEach(async (to, from, next) => {
   const { idToken } = await GoogleAuthentication.getIdToken({ forceRefresh: false });
