@@ -55,7 +55,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                 self.notifyListeners("google.auth.state.update", data: ["idToken": ""]);
             }
         }
-        
+
         self.googleClientId = call.getString("googleClientId") ?? ""
         call.resolve(["result": "success"])
     }
@@ -93,7 +93,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                         ])
                     }
                 }
-            
+
             call.resolve(["result": "success"])
         } catch {
             let error = error as NSError
@@ -289,12 +289,12 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             }
         }
     }
-    
+
     @objc func signInWithCustomToken(_ call: CAPPluginCall) {
         do {
             let token = ""
             let customToken = call.getString("customToken") ?? ""
-            
+
             Auth.auth().signIn(withCustomToken: customToken) { (user, error) in
                 if let error = error as? NSError {
                     let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
@@ -306,12 +306,12 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     ])
                 } else {
                     self.notifyListeners("google.auth.phone.verify.completed", data: [
-                        "idToken": token!
+                        "idToken": token
                     ])
-                    
+
                     call.resolve([
                         "result": "success",
-                        "token": token!,
+                        "token": token,
                     ])
                 }
             }
@@ -360,7 +360,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
 
     @objc func getCurrentUser(_ call: CAPPluginCall) {
         if let user = Auth.auth().currentUser {
-            user.getIdToken { (idToken, error) in
+            user.getIDToken { (idToken, error) in
                 if let error = error as? NSError {
                     let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
 
@@ -371,21 +371,21 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     ])
                 } else {
                     var userData: PluginCallResultData = [
-                        "email": user.email,
-                        "displayName": user.displayName,
-                        "phoneNumber": user.phoneNumber,
-                        "photoUrl": user.photoURL?.absoluteString,
+                        "email": user.email ?? "",
+                        "displayName": user.displayName ?? "",
+                        "phoneNumber": user.phoneNumber ?? "",
+                        "photoUrl": user.photoURL?.absoluteString ?? "",
                         "isEmailVerified": user.isEmailVerified,
                         "providerId": user.providerID,
                         "uid": user.uid,
-                        "accessToken": idToken,
+                        "accessToken": idToken ?? "",
                     ]
-                    
+
                     var data: PluginCallResultData = [
                         "result": "success",
                         "user": userData,
                     ]
-                    
+
                     call.resolve(data)
                 }
             }
@@ -459,6 +459,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
     @objc func signOut(_ call: CAPPluginCall) {
         do {
             try Auth.auth().signOut()
+            call.resolve(["result": "success"])
         } catch let error as NSError {
             let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
 
@@ -469,11 +470,11 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             ])
         }
     }
-    
+
     @objc func linkWithPhone(_ call: CAPPluginCall) {
         do {
             let phone = call.getString("phone") ?? ""
-            
+
             if (phone.isEmpty) {
                 throw NSError(
                     domain: "GoogleAuthenticationPlugin",
@@ -484,7 +485,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     ]
                 )
             }
-            
+
             PhoneAuthProvider.provider()
                 .verifyPhoneNumber(phone, uiDelegate: nil) { (verificationId, error) in
                     if let error = error as? NSError {
@@ -513,7 +514,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             ])
         }
     }
-    
+
     @objc func confirmLinkPhoneNumber(_ call: CAPPluginCall) {
         do {
             if (verificationId.isEmpty) {
@@ -526,13 +527,13 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     ]
                 )
             }
-            
+
             let code = call.getString("code") ?? ""
             let credential = PhoneAuthProvider.provider().credential(
                 withVerificationID: self.verificationId,
                 verificationCode: code
             )
-            
+
             if let user = Auth.auth().currentUser {
                 user.updatePhoneNumber(credential) { error in
                     if let error = error {
@@ -557,7 +558,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                     ]
                 )
             }
-            
+
         } catch let error as NSError {
             let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
 
@@ -568,7 +569,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             ])
         }
     }
-    
+
     @objc func echo(_ call: CAPPluginCall) {
         let value = call.getString("value") ?? ""
         call.resolve([
