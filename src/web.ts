@@ -37,13 +37,11 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
   private recaptchaVerifier: RecaptchaVerifier | null = null;
 
-  private recaptchaElement: HTMLElement | null = null;
-
   constructor() {
     super();
   }
 
-  async initialize(config: GoogleAuthenticationOptions): Promise<{ result: 'success' | 'error'}> {
+  async initialize(config: GoogleAuthenticationOptions): Promise<{ result: 'success' | 'error' }> {
     this.firebaseAuth = getAuth(initializeApp(config));
 
     if (config.persistence != null) {
@@ -79,7 +77,9 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     return Promise.resolve({ result: 'success' });
   }
 
-  async verifyPhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
+  async verifyPhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{
+    result: 'success' | 'error'
+  }> {
     try {
       console.log('verifyPhoneNumber:', this.firebaseAuth);
 
@@ -90,15 +90,14 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         );
       }
 
-      if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
+      if (this.recaptchaVerifier == null || elem.childElementCount === 0) {
         console.log('Create Recaptcha');
-        this.recaptchaElement = elem;
         this.recaptchaVerifier = new RecaptchaVerifier(this.firebaseAuth, elem, {
           size: 'invisible',
           callback() {
             elem.style.display = 'none !important';
           },
-        })
+        });
       }
 
       this.confirmationResult = await signInWithPhoneNumber(this.firebaseAuth, phone, this.recaptchaVerifier);
@@ -108,7 +107,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         resendingToken: null,
       });
 
-      return Promise.resolve({result: 'success'});
+      return Promise.resolve({ result: 'success' });
     } catch (error) {
       let message = 'Unknown error';
 
@@ -124,12 +123,12 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     }
   }
 
-  async confirmPhoneNumber({ code }: { code: string }): Promise<{ result: "success" | "error" }> {
+  async confirmPhoneNumber({ code }: { code: string }): Promise<{ result: 'success' | 'error' }> {
     if (this.confirmationResult == null) {
       throw {
         result: 'error',
         message: 'Invalid access',
-      }
+      };
     }
 
     const credential = await this.confirmationResult.confirm(code);
@@ -138,7 +137,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
-    })
+    });
 
     return Promise.resolve({
       result: 'success',
@@ -146,12 +145,15 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
-  async createUserWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{ result: "success" | "error"; idToken: string }> {
+  async createUserWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{
+    result: 'success' | 'error';
+    idToken: string
+  }> {
     if (this.firebaseAuth == null) {
       throw {
         result: 'error',
         message: 'Not initialized',
-      }
+      };
     }
 
     const userCredential = await createUserWithEmailAndPassword(this.firebaseAuth, email, password);
@@ -160,7 +162,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
-    })
+    });
 
     return Promise.resolve({
       result: 'success',
@@ -168,12 +170,15 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
-  async signInWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{ result: "success" | "error"; idToken: string }> {
+  async signInWithEmailAndPassword({ email, password }: { email: string, password: string }): Promise<{
+    result: 'success' | 'error';
+    idToken: string
+  }> {
     if (this.firebaseAuth == null) {
       throw {
         result: 'error',
         message: 'Not initialized',
-      }
+      };
     }
 
     const userCredential = await signInWithEmailAndPassword(this.firebaseAuth, email, password);
@@ -182,7 +187,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
-    })
+    });
 
     return Promise.resolve({
       result: 'success',
@@ -190,12 +195,12 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
-  async signInWithGoogle(): Promise<{ result: "success" | "error"; idToken: string }> {
+  async signInWithGoogle(): Promise<{ result: 'success' | 'error'; idToken: string }> {
     if (this.firebaseAuth == null) {
       throw {
         result: 'error',
         message: 'Not initialized',
-      }
+      };
     }
 
     const provider = new GoogleAuthProvider();
@@ -206,21 +211,24 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
       throw {
         result: 'error',
         message: 'Sign in failed',
-      }
+      };
     }
 
     return {
       idToken: (credential.idToken != null) ? credential.idToken : '',
-      result: 'success'
+      result: 'success',
     };
   }
 
-  async signInWithCustomToken({ customToken }: { customToken: string }): Promise<{ result: "success" | "error"; idToken: string }> {
+  async signInWithCustomToken({ customToken }: { customToken: string }): Promise<{
+    result: 'success' | 'error';
+    idToken: string
+  }> {
     if (this.firebaseAuth == null) {
       throw {
         result: 'error',
         message: 'Not initialized',
-      }
+      };
     }
 
     const userCredential = await signInWithCustomToken(this.firebaseAuth, customToken);
@@ -229,7 +237,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
-    })
+    });
 
     return Promise.resolve({
       result: 'success',
@@ -237,15 +245,18 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
-  async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{ result: "success" | "error"; idToken: string }> {
+  async getIdToken({ forceRefresh }: { forceRefresh: boolean }): Promise<{
+    result: 'success' | 'error';
+    idToken: string
+  }> {
     if (this.firebaseAuth == null) {
       throw {
         result: 'error',
         message: 'Not initialized',
-      }
+      };
     }
 
-    const idToken: string | undefined  = await this.firebaseAuth.currentUser?.getIdToken(forceRefresh);
+    const idToken: string | undefined = await this.firebaseAuth.currentUser?.getIdToken(forceRefresh);
 
     return Promise.resolve({
       result: 'success',
@@ -281,12 +292,12 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     return { result: 'success' };
   }
 
-  async signOut(): Promise<{ result: "success" | "error" }> {
+  async signOut(): Promise<{ result: 'success' | 'error' }> {
     if (this.firebaseAuth == null) {
       throw {
         result: 'error',
         message: 'Not initialized',
-      }
+      };
     }
 
     await this.firebaseAuth.signOut();
@@ -294,7 +305,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     return Promise.resolve({ result: 'success' });
   }
 
-  async linkWithPhone({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
+  async linkWithPhone({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: 'success' | 'error' }> {
     try {
       console.log('linkWithPhone');
 
@@ -305,15 +316,14 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         );
       }
 
-      if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
+      if (this.recaptchaVerifier == null || elem.childElementCount === 0) {
         console.log('Create Recaptcha');
-        this.recaptchaElement = elem;
         this.recaptchaVerifier = new RecaptchaVerifier(this.firebaseAuth, elem, {
           size: 'invisible',
           callback() {
             elem.style.display = 'none !important';
           },
-        })
+        });
       }
 
       const preUserResp = await this.getCurrentUser();
@@ -341,12 +351,12 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     }
   }
 
-  async confirmLinkPhoneNumber({ code }: { code: string }): Promise<{ result: "success" | "error" }> {
+  async confirmLinkPhoneNumber({ code }: { code: string }): Promise<{ result: 'success' | 'error' }> {
     if (this.confirmationResult == null) {
       throw {
         result: 'error',
         message: 'Invalid access',
-      }
+      };
     }
 
     const credential = await this.confirmationResult.confirm(code);
@@ -355,7 +365,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
-    })
+    });
 
     return Promise.resolve({
       result: 'success',
@@ -363,7 +373,9 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     });
   }
 
-  async updatePhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{ result: "success" | "error" }> {
+  async updatePhoneNumber({ phone, elem }: { phone: string, elem: HTMLElement }): Promise<{
+    result: 'success' | 'error'
+  }> {
     try {
       console.log('updatePhone');
 
@@ -374,9 +386,8 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
         );
       }
 
-      if (this.recaptchaVerifier == null || this.recaptchaElement?.parentNode == null) {
+      if (this.recaptchaVerifier == null || elem.childElementCount === 0) {
         console.log('Create Recaptcha');
-        this.recaptchaElement = elem;
         this.recaptchaVerifier = new RecaptchaVerifier(this.firebaseAuth, elem, {
           size: 'invisible',
           callback() {
