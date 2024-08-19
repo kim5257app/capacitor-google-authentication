@@ -141,7 +141,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     return Promise.resolve({
       result: 'success',
-      credential,
+      idToken,
     });
   }
 
@@ -369,7 +369,7 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     return Promise.resolve({
       result: 'success',
-      credential,
+      idToken,
     });
   }
 
@@ -448,11 +448,11 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
 
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
-    })
+    });
 
     return Promise.resolve({
       result: 'success',
-      credential,
+      idToken,
     });
   }
 

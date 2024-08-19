@@ -207,6 +207,7 @@ class GoogleAuthenticationPlugin : Plugin() {
 
             call.resolve(JSObject().apply {
                 this.put("result", "success")
+                this.put("idToken", idToken)
             })
         } catch (exception: Exception) {
             val code = when (exception) {
@@ -622,6 +623,7 @@ class GoogleAuthenticationPlugin : Plugin() {
 
                     call.resolve(JSObject().apply {
                         this.put("result", "success")
+                        this.put("idToken", idToken)
                     })
                 } else {
                     val errorCode = when (task.exception) {
@@ -688,6 +690,7 @@ class GoogleAuthenticationPlugin : Plugin() {
 
                     call.resolve(JSObject().apply {
                         this.put("result", "success")
+                        this.put("idToken", idToken)
                     })
                 } else {
                     val errorCode = when (task.exception) {

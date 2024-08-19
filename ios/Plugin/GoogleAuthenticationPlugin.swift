@@ -144,7 +144,8 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                         ])
 
                         call.resolve([
-                            "result": "success"
+                            "result": "success",
+                            "idToken": token
                         ])
                     })
                 }
@@ -535,6 +536,72 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             )
 
             if let user = Auth.auth().currentUser {
+                user.link(credential) { error in
+                    if let error = error {
+                        call.reject(error.localizedDescription, code, error, [
+                            "result": "error",
+                            "code": code,
+                            "message": error.localizedDescription,
+                        ])
+                    } else {
+                        user.getIDToken { token in
+                            self.notifyListeners("google.auth.phone.verify.completed", data: [
+                                "idToken": token
+                            ])
+                            
+                            call.resolve([
+                                "result": "success",
+                                "idToken": token
+                            ])
+                        }
+                    }
+                }
+            } else {
+                throw NSError(
+                    domain: "GoogleAuthenticationPlugin",
+                    code: 0,
+                    userInfo: [
+                        "code": "ERROR_WRONG_VALUE",
+                        "message": "Invalid User",
+                    ]
+                )
+            }
+
+        } catch let error as NSError {
+            let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+
+            call.reject(error.localizedDescription, code, error, [
+                "result": "error",
+                "code": code,
+                "message": error.localizedDescription,
+            ])
+        }
+    }
+    
+    @objc func updatePhoneNumber(_ call: CAPPluginCall) {
+        return self.linkWithPhone(call)
+    }
+    
+    @objc func confirmUpdatePhoneNumber(_ call: CAPPluginCall) {
+        do {
+            if (verificationId.isEmpty) {
+                throw NSError(
+                    domain: "GoogleAuthenticationPlugin",
+                    code: 0,
+                    userInfo: [
+                        "code": "ERROR_WRONG_VALUE",
+                        "message": "Invalid verification ID",
+                    ]
+                )
+            }
+
+            let code = call.getString("code") ?? ""
+            let credential = PhoneAuthProvider.provider().credential(
+                withVerificationID: self.verificationId,
+                verificationCode: code
+            )
+
+            if let user = Auth.auth().currentUser {
                 user.updatePhoneNumber(credential) { error in
                     if let error = error {
                         call.reject(error.localizedDescription, code, error, [
@@ -543,9 +610,16 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                             "message": error.localizedDescription,
                         ])
                     } else {
-                        call.resolve([
-                            "result": "success",
-                        ])
+                        user.getIDToken { token in
+                            self.notifyListeners("google.auth.phone.verify.completed", data: [
+                                "idToken": token
+                            ])
+                            
+                            call.resolve([
+                                "result": "success",
+                                "idToken": token
+                            ])
+                        }
                     }
                 }
             } else {

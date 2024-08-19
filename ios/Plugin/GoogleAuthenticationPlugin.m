@@ -18,5 +18,7 @@ CAP_PLUGIN(GoogleAuthenticationPlugin, "GoogleAuthentication",
            CAP_PLUGIN_METHOD(signOut, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(linkWithPhone, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(confirmLinkPhoneNumber, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(updatePhoneNumber, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(confirmUpdatePhoneNumber, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(echo, CAPPluginReturnPromise);
 )
