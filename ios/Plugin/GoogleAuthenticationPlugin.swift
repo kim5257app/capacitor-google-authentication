@@ -536,7 +536,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             )
 
             if let user = Auth.auth().currentUser {
-                user.link(credential) { error in
+                user.link(with: credential) { result, error in
                     if let error = error {
                         call.reject(error.localizedDescription, code, error, [
                             "result": "error",
@@ -544,14 +544,14 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                             "message": error.localizedDescription,
                         ])
                     } else {
-                        user.getIDToken { token in
+                        result!.user.getIDToken { token, _  in
                             self.notifyListeners("google.auth.phone.verify.completed", data: [
-                                "idToken": token
+                                "idToken": token ?? ""
                             ])
-                            
+
                             call.resolve([
                                 "result": "success",
-                                "idToken": token
+                                "idToken": token ?? ""
                             ])
                         }
                     }
@@ -577,11 +577,11 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
             ])
         }
     }
-    
+
     @objc func updatePhoneNumber(_ call: CAPPluginCall) {
         return self.linkWithPhone(call)
     }
-    
+
     @objc func confirmUpdatePhoneNumber(_ call: CAPPluginCall) {
         do {
             if (verificationId.isEmpty) {
@@ -610,14 +610,14 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                             "message": error.localizedDescription,
                         ])
                     } else {
-                        user.getIDToken { token in
+                        user.getIDToken { token, _  in
                             self.notifyListeners("google.auth.phone.verify.completed", data: [
-                                "idToken": token
+                                "idToken": token ?? ""
                             ])
-                            
+
                             call.resolve([
                                 "result": "success",
-                                "idToken": token
+                                "idToken": token ?? ""
                             ])
                         }
                     }
