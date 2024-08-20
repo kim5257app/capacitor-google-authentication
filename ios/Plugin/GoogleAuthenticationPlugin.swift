@@ -238,7 +238,7 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
 
         GIDSignIn.sharedInstance.signIn(withPresenting: viewController!) { [unowned self] result, error in
             if let error = error as? NSError {
-                let code = error.userInfo["FIRAuthErrorUserInfoNameKey"] as! String
+                let code: String = (error.userInfo["FIRAuthErrorUserInfoNameKey"] as? String) ?? "ERROR_UNKNOWN"
 
                 call.reject(error.localizedDescription, code, error, [
                     "result": "error",

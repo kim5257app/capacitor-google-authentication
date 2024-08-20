@@ -22,6 +22,8 @@ export interface GoogleAuthenticationPlugin {
 
   signInWithCustomToken({ customToken }: { customToken: string }): Promise<{ result: "success" | "error"; idToken: string }>;
 
+  signInWithApple(): Promise<{ result: "success" | "error"; idToken: string }>;
+
   getIdToken(options: { forceRefresh: boolean })
     : Promise<{
       result: 'success' | 'error';

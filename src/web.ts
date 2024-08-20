@@ -21,6 +21,7 @@ import {
   updatePhoneNumber,
   Auth,
   User,
+  OAuthProvider,
 } from 'firebase/auth';
 
 import type { GoogleAuthenticationPlugin, GoogleAuthenticationOptions } from './definitions';
@@ -238,6 +239,21 @@ export class GoogleAuthenticationWeb extends WebPlugin implements GoogleAuthenti
     this.notifyListeners('google.auth.phone.verify.completed', {
       idToken,
     });
+
+    return Promise.resolve({
+      result: 'success',
+      idToken,
+    });
+  }
+
+  async signInWithApple(): Promise<{
+    result: "success" | "error";
+    idToken: string }> {
+    const provider = new OAuthProvider('apple.com');
+    provider.setCustomParameters({ locale: 'ko' });
+    const result = await signInWithPopup(this.firebaseAuth!, provider);
+    const credential = OAuthProvider.credentialFromResult(result);
+    const idToken = credential?.idToken ?? '';
 
     return Promise.resolve({
       result: 'success',
