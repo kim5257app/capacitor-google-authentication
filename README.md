@@ -20,6 +20,7 @@ npx cap sync
 * [`signInWithEmailAndPassword(...)`](#signinwithemailandpassword)
 * [`signInWithGoogle()`](#signinwithgoogle)
 * [`signInWithCustomToken(...)`](#signinwithcustomtoken)
+* [`signInWithApple()`](#signinwithapple)
 * [`getIdToken(...)`](#getidtoken)
 * [`getCurrentUser()`](#getcurrentuser)
 * [`updateProfile(...)`](#updateprofile)
@@ -137,6 +138,17 @@ signInWithCustomToken({ customToken }: { customToken: string; }) => Promise<{ re
 | Param     | Type                                  |
 | --------- | ------------------------------------- |
 | **`__0`** | <code>{ customToken: string; }</code> |
+
+**Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
+
+--------------------
+
+
+### signInWithApple()
+
+```typescript
+signInWithApple() => Promise<{ result: "success" | "error"; idToken: string; }>
+```
 
 **Returns:** <code>Promise&lt;{ result: 'error' | 'success'; idToken: string; }&gt;</code>
 

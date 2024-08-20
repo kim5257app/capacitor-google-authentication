@@ -1,8 +1,10 @@
 import Foundation
+import AuthenticationServices
 import Capacitor
 import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
+import CryptoKit
 
 enum GoogleAuthError: Error {
     case Common(message: String, code: String)
@@ -22,7 +24,7 @@ extension GoogleAuthError: LocalizedError {
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(GoogleAuthenticationPlugin)
-public class GoogleAuthenticationPlugin: CAPPlugin {
+public class GoogleAuthenticationPlugin: CAPPlugin, ASAuthorizationControllerPresentationContextProviding {
     private let implementation = GoogleAuthentication()
 
     private var googleClientId = ""
@@ -328,6 +330,62 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
         }
     }
 
+    private func randomNonceString(length: Int = 32) -> String {
+        precondition(length > 0)
+
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        if errorCode != errSecSuccess {
+            fatalError(
+                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+            )
+        }
+
+        let charset: [Character] =
+            Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+
+        let nonce = randomBytes.map { byte in
+            charset[Int(byte) % charset.count]
+        }
+
+        return String(nonce)
+    }
+
+    @available(iOS 13, *)
+    private func sha256(_ input: String) -> String {
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            String(format: "%02x", $0)
+        }.joined()
+
+        return hashString
+    }
+
+    public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return self.webView!.window!
+    }
+
+    fileprivate var currentNonce: String?
+    fileprivate var currentCall: CAPPluginCall?
+
+    @available(iOS 13, *)
+    @objc func signInWithApple(_ call: CAPPluginCall) {
+        let nonce = randomNonceString()
+        currentNonce = nonce
+        currentCall = call
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = sha256(nonce)
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
+    }
+
+
     @objc func getIdToken(_ call: CAPPluginCall) {
         let user = Auth.auth().currentUser
         let forceRefresh = call.getBool("forceRefresh") ?? false
@@ -473,6 +531,8 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
     }
 
     @objc func linkWithPhone(_ call: CAPPluginCall) {
+        print("linkWithPhone")
+
         do {
             let phone = call.getString("phone") ?? ""
 
@@ -496,12 +556,22 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
                             "message": error.localizedDescription,
                             "code": code,
                         ])
+
+                        call.reject(error.localizedDescription, code, error, [
+                            "result": "error",
+                            "code": code,
+                            "message": error.localizedDescription,
+                        ])
                     } else {
                         self.verificationId = verificationId ?? ""
 
                         self.notifyListeners("google.auth.phone.code.sent", data: [
                             "verificationId": self.verificationId,
                             "resendingToken": "",
+                        ])
+
+                        call.resolve([
+                            "result": "success",
                         ])
                     }
                 }
@@ -649,5 +719,42 @@ public class GoogleAuthenticationPlugin: CAPPlugin {
         call.resolve([
             "value": implementation.echo(value)
         ])
+    }
+}
+
+@available(iOS 13.0, *)
+extension GoogleAuthenticationPlugin: ASAuthorizationControllerDelegate {
+    public func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            guard let nonce = currentNonce else {
+                fatalError("Invalid state: A login callback was received, but no login request was sent.")
+            }
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
+
+            let credential = OAuthProvider.appleCredential(withIDToken: idTokenString, rawNonce: nonce, fullName: appleIDCredential.fullName)
+            Auth.auth().signIn(with: credential) { (authResult, error) in
+                if (error != nil) {
+                    self.currentCall!.reject(error!.localizedDescription, nil, error, [
+                        "result": "error",
+                        "code": 0,
+                        "message": error!.localizedDescription,
+                    ])
+                } else {
+                    authResult!.user.getIDToken { token, _  in
+                        self.currentCall!.resolve([
+                            "result": "success",
+                            "idToken": token ?? ""
+                        ])
+                    }
+                }
+            }
+        }
     }
 }

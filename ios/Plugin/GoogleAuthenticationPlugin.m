@@ -11,6 +11,7 @@ CAP_PLUGIN(GoogleAuthenticationPlugin, "GoogleAuthentication",
            CAP_PLUGIN_METHOD(signInWithEmailAndPassword, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(signInWithGoogle, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(signInWithCustomToken, CAPPluginReturnPromise);
+           CAP_PLUGIN_METHOD(signInWithApple, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getIdToken, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(getCurrentUser, CAPPluginReturnPromise);
            CAP_PLUGIN_METHOD(updateProfile, CAPPluginReturnPromise);
